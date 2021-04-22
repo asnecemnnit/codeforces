@@ -2,6 +2,8 @@
 
 /******** User-defined Function *******/
 
+////////////////////////////////////////////////////////////////////////////////
+
 /*		check vector<int> is a palindrome		*/
 bool isVecPalindrome(VI a)
 {
@@ -38,6 +40,8 @@ bool isStrPalindrome(string a)
 	return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 /*		check number is a power of 2		*/
 bool isPowerOfTwo(int n)
 {
@@ -60,6 +64,8 @@ int countDigits(int n)
 
 	return ans;
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 /* Returns prime bool vector using sieve of Eratosthenes algorithm */
 vector<bool> SieveOfEratosthenes(int n=1000000)
@@ -217,6 +223,8 @@ int LCSubStr(string X, string Y, int m, int n)
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 /*	At each iteration the vertex v is selected
 	which has the smallest distance d[v] among
 	all the unmarked vertices. If the distance
@@ -230,6 +238,8 @@ int LCSubStr(string X, string Y, int m, int n)
 const int INF = 1000000000;
 vector<vector<pair<int, int>>> adj;
 
+/*	Dijkstra Algorithm for finding shortest paths from
+	source to all vertices in the given graph	*/
 void dijkstra(int s, vector<int> & d, vector<int> & p) {
     int n = adj.size();
     d.assign(n, INF);
@@ -274,6 +284,7 @@ vector<int> restore_path(int s, int t, vector<int> const& p) {
     return path;
 }
 
+////////////////////////////////////////////////////////////////////////////////
 
 /* 	find a spanning tree of this graph which connects
  	all vertices and has the least weight (i.e. the sum
@@ -381,3 +392,84 @@ void prim() {
 
     cout << total_weight << endl;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
+/*	KMP Algorithm for pattern matching	*/
+
+// Prints occurrences of txt[] in pat[]
+void KMPSearch(string pat, string txt)
+{
+    int M = pat.length();
+    int N = txt.length();
+
+    // create lps[] that will hold the longest prefix suffix
+    // values for pattern
+    int lps[M];
+	vector<int> lps(M);
+
+    // Preprocess the pattern (calculate lps[] array)
+    computeLPSArray(pat, M, lps);
+
+    int i = 0; // index for txt[]
+    int j = 0; // index for pat[]
+    while (i < N) {
+        if (pat[j] == txt[i]) {
+            j++;
+            i++;
+        }
+
+        if (j == M) {
+            printf("Found pattern at index %d ", i - j);
+            j = lps[j - 1];
+        }
+
+        // mismatch after j matches
+        else if (i < N && pat[j] != txt[i]) {
+            // Do not match lps[0..lps[j-1]] characters,
+            // they will match anyway
+            if (j != 0)
+                j = lps[j - 1];
+            else
+                i = i + 1;
+        }
+    }
+}
+
+// Fills lps[] for given patttern pat[0..M-1]
+void computeLPSArray(string pat, int M, vector<int> &lps)
+{
+    // length of the previous longest prefix suffix
+    int len = 0;
+
+    lps[0] = 0; // lps[0] is always 0
+
+    // the loop calculates lps[i] for i = 1 to M-1
+    int i = 1;
+    while (i < M) {
+        if (pat[i] == pat[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        }
+        else // (pat[i] != pat[len])
+        {
+            // This is tricky. Consider the example.
+            // AAACAAAA and i = 7. The idea is similar
+            // to search step.
+            if (len != 0) {
+                len = lps[len - 1];
+
+                // Also, note that we do not increment
+                // i here
+            }
+            else // if (len == 0)
+            {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
