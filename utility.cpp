@@ -376,44 +376,73 @@ void dijkstra(int graph[V][V], int src)
 	all vertices (or equivalently until we have n−1 edges)	*/
 
 // Dense graphs : O(n2) time and O(n) memory
-int n;
-vector<vector<int>> adj; // adjacency matrix of graph
-const int INF = 1000000000; // weight INF means there is no edge
+vector<vector<pair<int,int>>> adj;
+vector<pair<int,pair<int,int>>> v;
+vector<pair<int,int>> vals;
 
-struct Edge {
-    int w = INF, to = -1;
-};
+/* 	find a spanning tree of this graph which connects
+ 	all vertices and has the least weight (i.e. the sum
+	of weights of edges is minimal). A spanning tree is
+	a set of edges such that any vertex can reach any
+	other by exactly one simple path. The spanning tree
+	with the least weight is called a minimum spanning tree.
 
-void prim() {
+	The minimum spanning tree is built gradually by adding
+	edges one at a time. At first the spanning tree consists
+	only of a single vertex (chosen arbitrarily). Then the
+	minimum weight edge outgoing from this vertex is selected
+	and added to the spanning tree. After that the spanning
+	tree already consists of two vertices. Now select and
+	add the edge with the minimum weight that has one end
+	in an already selected vertex (i.e. a vertex that is
+	already part of the spanning tree), and the other end
+	in an unselected vertex. And so on, i.e. every time we
+	select and add the edge with minimal weight that connects
+	one selected vertex with one unselected vertex. The
+	process is repeated until the spanning tree contains
+	all vertices (or equivalently until we have n−1 edges)	*/
+
+// Dense graphs : O(n2) time and O(n) memory
+
+void prim(int n) {
     int total_weight = 0;
     vector<bool> selected(n, false);
-    vector<Edge> min_e(n);
-    min_e[0].w = 0;
+
+	// first = to, second = w
+    vector<pair<int,int>> min_e(n,make_pair(-1,INF));
+	min_e[0].second = 0;
 
     for (int i=0; i<n; ++i) {
         int v = -1;
         for (int j = 0; j < n; ++j) {
-            if (!selected[j] && (v == -1 || min_e[j].w < min_e[v].w))
+            if (!selected[j] && (v == -1 || min_e[j].second < min_e[v].second))
                 v = j;
         }
 
-        if (min_e[v].w == INF) {
+		// INF means there is no edge
+        if (min_e[v].second == INF) {
             cout << "No MST!" << endl;
             exit(0);
         }
 
         selected[v] = true;
-        total_weight += min_e[v].w;
-        if (min_e[v].to != -1)
-            cout << v << " " << min_e[v].to << endl;
+        total_weight += min_e[v].second;
+        // if (min_e[v].first != -1)
+        //     cout << v << " " << min_e[v].first << endl;
 
-        for (int to = 0; to < n; ++to) {
-            if (adj[v][to] < min_e[to].w)
-                min_e[to] = {adj[v][to], v};
+        for (int j = 0; j < adj[v].size(); ++j) {
+            if (adj[v][j].second < min_e[adj[v][j].first].second)
+                min_e[adj[v][j].first] = make_pair(v, adj[v][j].second);
         }
+
+		// for (int i=0; i<n; ++i) {
+		// 	debug("i",i,"to",min_e[i].first,"weight",min_e[i].second);
+		// }
     }
 
     cout << total_weight << endl;
+
+	return;
 }
 
 // Sparse graphs : O(mlogn) time
@@ -540,3 +569,41 @@ void computeLPSArray(string pat, int M, vector<int> &lps)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+vector<vector<pair<int,int>>> adj;
+vector<pair<int,pair<int,int>>> v;
+vector<pair<int,int>> vals;
+
+/*	Add an edge (weighted, if isWeighted = true) from u to v in a graph	*/
+void addEdge(int u,
+	int v, bool isWeighted , int wt)
+{
+	if(isWeighted)
+	{
+		adj[u].push_back(make_pair(v, wt));
+	    adj[v].push_back(make_pair(u, wt));
+	}
+	else
+	{
+		// ignore wt
+		adj[u].push_back(make_pair(v, 0));
+	    adj[v].push_back(make_pair(v, 0));
+	}
+
+	return;
+}
+
+/*	Create an undirected graph of n vertices and
+	returns vector of adj vectors	*/
+void createGraph(int n, bool isWeighted)
+{
+
+	for(int i=0; i<v.size(); i++)
+	{
+		addEdge(v[i].second.first, v[i].second.second,
+			isWeighted, v[i].first);
+	}
+
+	return;
+
+}
