@@ -1,4 +1,4 @@
-// p2.cpp
+// p1.cpp
 // Created by Ashish Negi
 
 /********   All Required Header Files ********/
@@ -154,177 +154,10 @@ template <typename T> inline T readInt()
 
 /******** User-defined Function *******/
 
-/*		check vector<int> is a palindrome		*/
-bool isVecPalindrome(VI a)
-{
-	int n = a.size();
-	if(n==1)
-		return true;
-
-	REP(i,n/2)
-	{
-		if(a[i] != a[n-1-i])
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-/*		check string is a palindrome		*/
-bool isStrPalindrome(string a)
-{
-	int n = a.length();
-	if(n==1)
-		return true;
-
-	REP(i,n/2)
-	{
-		if(a[i] != a[n-1-i])
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-/*		check number is a power of 2		*/
-bool isPowerOfTwo(int n)
-{
-	if(floor(log2(n)) == ceil(log2(n)))
-		return true;
-	else
-		return false;
-}
-
-/*		count number of digits in an integer		*/
-int countDigits(int n)
-{
-	int ans=0;
-
-	while(n>0)
-	{
-		n /= 10;
-		ans++;
-	}
-
-	return ans;
-}
-
-// // Returns true if str1[] is a
-// // subsequence of str2[]. m is
-// // length of str1 and n is length of str2
-// bool isSubSequence(string str1, string str2, int m, int n)
-// {
-//     int j = 0; // For index of str1 (or subsequence
-//
-//     // Traverse str2 and str1, and
-//     // compare current character
-//     // of str2 with first unmatched char
-//     // of str1, if matched
-//     // then move ahead in str1
-//     for (int i = 0; i < n && j < m; i++)
-//         if (str1[j] == str2[i])
-//             j++;
-//
-//     // If all characters of str1 were found in str2
-//     return (j == m);
-// }
-// Iterative DP function to find the number of times
-// the second string occurs in the first string,
-// whether continuous or discontinuous
-// int count_sub(string a, string b)
-// {
-//     int m = a.length();
-//     int n = b.length();
-//
-//     // Create a table to store results of sub-problems
-//     vector<vector<int>> lookup(m+1, vector<int>(n+1, 0));
-//
-//     // If first string is empty
-//     for (int i = 0; i <= n; ++i)
-//         lookup[0][i] = 0;
-//
-//     // If second string is empty
-//     for (int i = 0; i <= m; ++i)
-//         lookup[i][0] = 1;
-//
-//     // Fill lookup[][] in bottom up manner
-//     for (int i = 1; i <= m; i++)
-//     {
-//         for (int j = 1; j <= n; j++)
-//         {
-//             // If last characters are same, we have two
-//             // options -
-//             // 1. consider last characters of both strings
-//             //    in solution
-//             // 2. ignore last character of first string
-//             if (a[i - 1] == b[j - 1])
-//                 lookup[i][j] = lookup[i - 1][j - 1] +
-//                                lookup[i - 1][j];
-//
-//             else
-//                 // If last character are different, ignore
-//                 // last character of first string
-//                 lookup[i][j] = lookup[i - 1][j];
-//         }
-//     }
-//
-//     return lookup[m][n];
-// }
-
 /**************************************/
-void solve()
+void solve(int tc)
 {
-	int n;
-	INP(n);
-	string s;
-	string tmt = "TMT";
-	INP(s);
-	vector<int> tp;
-	vector<int> mp;
-	bool notExist = false;
-	for(int i=0; i<s.length(); i++)
-	{
-		if(s[i]=='T')
-			tp.push_back(i);
-		else
-			mp.push_back(i);
-	}
-
-	if(tp.size() != 2 * mp.size())
-	{
-		notExist = true;
-	}
-	else
-	{
-		// cout<<tp.size()<<" "<<mp.size()<<endl;
-
-		for(int i=0, j=tp.size()-1, k=0, l=mp.size()-1; tp[i]<tp[j]; i++, j--)
-		{
-			if((k<mp.size() and mp[k]>tp[i]) and (l>=0 and mp[l]<tp[j]))
-			{
-				// cout<<tp[i]<<" "<<mp[k]<<" "<<tp[j]<<endl;
-				k++;
-				l--;
-			}
-			else
-			{
-				notExist = true;
-				break;
-			}
-
-		}
-	}
-
-
-
-	if(notExist)
-		OUT("NO");
-	else
-		OUT("YES");
+	debug(tc, "hello world");
 }
 
 /********** Main()  function **********/
@@ -342,7 +175,7 @@ int main()
 	INP(tc);
 
 	while(tc--){
-		solve();
+		solve(tc);
 	}
 	return 0;
 }
