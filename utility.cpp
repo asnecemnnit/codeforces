@@ -4,7 +4,62 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/*		check vector<int> is a palindrome		*/
+/*	precomputes factorial till	M	*/
+#define M 100000
+mint fact[M + 1], i_f[M + 1];
+
+void precomputeFactorial(){
+	fact[0] = 1;
+	i_f[0] = 1;
+
+	for(int i = 1; i < M; ++i){
+		fact[i] = fact[i - 1] * i;
+		i_f[i] = i_f[i - 1] / i;
+	}
+}
+
+// Combinations
+/*	Computes ncr using fact and i_f	*/
+mint ncr(int n, int r){
+	if (n < r || r < 0 || n < 0){
+		return 0;
+	}
+	return fact[n] * i_f[r] * i_f[n - r];
+}
+
+/*	Computes ncr from scratch */
+mint Ncr(int n, int r){
+	mint ans = 1;
+	for(int i = 1; i <= r; ++i){
+		ans *= n;
+		ans /= i;
+		--n;
+	}
+	return ans;
+}
+
+// Permutations
+/*	Computes npr using fact and i_f	*/
+mint npr(int n, int r){
+	if (n < r || r < 0 || n < 0){
+		return 0;
+	}
+	return fact[n] * i_f[n - r];
+}
+
+/*	Computes npr from scratch */
+mint Npr(int n, int r){
+	mint ans = 1;
+	for(int i = 1; i <= r; ++i){
+		ans *= n;
+		// ans /= i;
+		--n;
+	}
+	return ans;
+}
+////////////////////////////////////////////////////////////////////////////////
+
+/*	check vector<int> is a palindrome	*/
 bool isVecPalindrome(VI a)
 {
 	int n = a.size();
@@ -22,7 +77,7 @@ bool isVecPalindrome(VI a)
 	return true;
 }
 
-/*		check string is a palindrome		*/
+/*	check string is a palindrome	*/
 bool isStrPalindrome(string a)
 {
 	int n = a.length();
@@ -42,7 +97,7 @@ bool isStrPalindrome(string a)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/*		check number is a power of 2		*/
+/*	check number is a power of 2	*/
 bool isPowerOfTwo(int n)
 {
 	if(floor(log2(n)) == ceil(log2(n)))
@@ -51,7 +106,7 @@ bool isPowerOfTwo(int n)
 		return false;
 }
 
-/*		count number of digits in an integer		*/
+/*	count number of digits in an integer	*/
 int countDigits(int n)
 {
 	int ans=0;
