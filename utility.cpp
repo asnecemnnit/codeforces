@@ -208,6 +208,56 @@ void manipulated_seive(int N)
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+/*	Returns the length of the longest
+    increasing subsequence (LIS) in nums. O(nlogn)	*/
+int lengthOfLIS(vector<int>& nums)
+{
+    int n = nums.size();
+    vector<int> pilesTop;
+    pilesTop.reserve(n);
+    for(int i = 0; i < n; i++)
+    {
+		// O(logn)
+        auto left = lower_bound(pilesTop.begin(), pilesTop.end(), nums[i]);
+        if(left == pilesTop.end())
+            pilesTop.push_back(nums[i]);
+        else
+            *left = nums[i];
+
+        // cout<<"i = "<<i<<", *left "<<*left<<endl;
+        // for(auto x:pilesTop)
+        // {
+        //     cout<<x<<" ";
+        // }
+        // cout<<endl;
+    }
+    return pilesTop.size();
+}
+
+/*	Returns the length of the longest
+    increasing subsequence (LIS) in nums. O(n^2)	*/
+int lengthOfLIS(vector<int>& nums)
+{
+    int n = nums.size();
+    vector<int> lis(n);
+
+    lis[0] = 1;
+
+    /* Compute optimized LIS values in
+       bottom up manner */
+    for (int i = 1; i < n; i++ )
+    {
+        lis[i] = 1;
+        for (int j = 0; j < i; j++ )
+            if (nums[i] > nums[j] && lis[i] < lis[j] + 1)
+                lis[i] = lis[j] + 1;
+    }
+
+    // Return maximum value in lis[]
+    return *max_element(lis.begin(), lis.end());
+}
+
 /* Returns length of longest common subsequence for X[0..m-1], Y[0..n-1] */
 int lcs(string X, string Y, int m, int n )
 {
