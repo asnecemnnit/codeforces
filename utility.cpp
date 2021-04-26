@@ -258,6 +258,8 @@ int lengthOfLIS(vector<int>& nums)
     return *max_element(lis.begin(), lis.end());
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 /* Returns length of longest common subsequence for X[0..m-1], Y[0..n-1] */
 int lcs(string X, string Y, int m, int n )
 {
@@ -287,6 +289,8 @@ int lcs(string X, string Y, int m, int n )
     for X[0..n-1] and Y[0..m-1] */
     return L[m][n];
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 /* Returns length of longest
    common substring of X[0..m-1]
@@ -326,6 +330,58 @@ int LCSubStr(string X, string Y, int m, int n)
         }
     }
     return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+/*	Find number of times a string occurs as
+	a subsequence in given string	*/
+
+// A Dynamic Programming based C++ program to find the
+// number of times the second string occurs in the first
+// string, whether continuous or discontinuous
+
+// Iterative DP function to find the number of times
+// the second string occurs in the first string,
+// whether continuous or discontinuous
+int count(string a, string b)
+{
+    int m = a.length();
+    int n = b.length();
+
+    // Create a table to store results of sub-problems
+	vector<vector<int>> lookup(m+1, vector<int>(n+1, 0));
+
+    // If first string is empty
+    for (int i = 0; i <= n; ++i)
+        lookup[0][i] = 0;
+
+    // If second string is empty
+    for (int i = 0; i <= m; ++i)
+        lookup[i][0] = 1;
+
+    // Fill lookup[][] in bottom up manner
+    for (int i = 1; i <= m; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            // If last characters are same, we have two
+            // options -
+            // 1. consider last characters of both strings
+            //    in solution
+            // 2. ignore last character of first string
+            if (a[i - 1] == b[j - 1])
+                lookup[i][j] = lookup[i - 1][j - 1] +
+                               lookup[i - 1][j];
+
+            else
+                // If last character are different, ignore
+                // last character of first string
+                lookup[i][j] = lookup[i - 1][j];
+        }
+    }
+
+    return lookup[m][n];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
