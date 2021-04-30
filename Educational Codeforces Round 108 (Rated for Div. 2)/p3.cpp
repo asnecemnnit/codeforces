@@ -437,13 +437,23 @@ const int modular_int<mod>::inverse_limit = 1000;
 #endif
 
 /**************************************/
-map<int, vector<int>> us;
+// unordered_map<int, vector<int>> us;
 /******** User-defined Function *******/
-void sort_map()
+// void sort_map()
+// {
+// 	for(auto& it : us)
+// 	{
+// 		sort(it.second.begin(), it.second.end(), greater<int>());
+// 	}
+//
+// 	return;
+// }
+
+void sort_vector(set<int> uset, vector<int> v[])
 {
-	for(auto& it : us)
+	for(auto& it : uset)
 	{
-		sort(it.second.begin(), it.second.end(), greater<int>());
+		sort(v[it].begin(), v[it].end(), greater<int>());
 	}
 
 	return;
@@ -458,57 +468,77 @@ void solve()
 	INPV(u,n);
 	INPV(s,n);
 
-	us.clear();
+	// us.clear();
+	// unordered_map<int, vector<int>> us;
+	set<int> uset;
 
 	REP(i,n)
 	{
-		us[u[i] - 1].push_back(s[i]);
+		// us[u[i] - 1].push_back(s[i]);
+		uset.insert(u[i]);
 	}
 
-	sort_map();
+	VI us[n];
+	REP(i,n)
+	{
+		us[u[i]].push_back(s[i]);
+	}
 
-	map<int, vector<uint64>> pre_sum;
+	// sort_map();
+	sort_vector(uset, us);
+
+	// unordered_map<int, vector<uint64>> pre_sum;
+	vector<uint64> pre_sum[n];
 	// for(auto x:us)
 	// {
 	// 	pre_sum[x.first].push_back(x.second[0]);
 	// }
 
 	// uint64 sum = 0;
-	for(auto x:us)
+	REP(i,n)
 	{
-		uint64 ps = 0;
-		for(auto y:x.second)
+		if(us[i].size())
 		{
-			uint64 curr = ps + (uint64)y;
-			pre_sum[x.first].push_back(curr);
-			ps += y;
-		}
-	}
-
-	for(int k=1; k<=n; k++)
-	{
-		uint64 sum = 0;
-		for(auto x:pre_sum)
-		{
-			if(k <= x.second.size())
+			uint64 ps = 0;
+			for(auto x:us[i])
 			{
-				sum += x.second[(x.second.size() / k) * k - 1];
+				uint64 curr = ps + (uint64)x;
+				pre_sum[i].push_back(curr);
+				ps += (uint64)x;
 			}
-
 		}
-		cout<<sum<<" ";
 	}
-	cout<<endl;
 
-
-	// for(auto x:pre_sum)
+	// for(int k=1; k<=n; k++)
 	// {
-	// 	for(auto y:x.second)
+	// 	for(auto x:pre_sum[k-1])
 	// 	{
-	// 		cout<<y<<" ";
+	// 		cout<<x<<" ";
 	// 	}
 	// 	cout<<endl;
 	// }
+
+	VI ans(n);
+	REP(i,n)
+	{
+		uint64 sum = 0;
+		vector<uint64> x = pre_sum[i];
+		if(x.size())
+		{
+			for(int k=1; k<=x.size(); k++)
+			{
+				ans[k-1] += x[(x.size() / k) * k - 1];
+			}
+		}
+
+	}
+
+	for(int k=0; k<ans.size(); k++)
+	{
+		cout<<ans[k]<<" ";
+	}
+	cout<<endl;
+
 
 	return;
 }
