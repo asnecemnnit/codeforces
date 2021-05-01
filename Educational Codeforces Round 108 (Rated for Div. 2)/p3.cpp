@@ -475,8 +475,9 @@ void solve()
 	REP(i,n)
 	{
 		// us[u[i] - 1].push_back(s[i]);
-		uset.insert(u[i]);
+		uset.insert(--u[i]);
 	}
+
 
 	VI us[n];
 	REP(i,n)
@@ -484,8 +485,11 @@ void solve()
 		us[u[i]].push_back(s[i]);
 	}
 
+
 	// sort_map();
 	sort_vector(uset, us);
+
+
 
 	// unordered_map<int, vector<uint64>> pre_sum;
 	vector<uint64> pre_sum[n];
@@ -518,7 +522,7 @@ void solve()
 	// 	cout<<endl;
 	// }
 
-	VI ans(n);
+	vector<uint64> ans(n);
 	REP(i,n)
 	{
 		uint64 sum = 0;
