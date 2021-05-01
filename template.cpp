@@ -409,6 +409,9 @@ const int modular_int<mod>::inverse_limit = 1000;
 #ifdef DEBUG
 
     #define debug(args...)     (Debugger()) , args
+    #define dbg(var1) cerr<<#var1<<" = "<<(var1)<<endl;
+    #define dbg2(var1,var2) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<endl;
+    #define dbg3(var1,var2,var3) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<", "<<#var3<<" = "<<(var3)<<endl;
 
     class Debugger
     {
