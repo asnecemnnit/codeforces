@@ -121,6 +121,39 @@ int countDigits(int n)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/* Count Inversions in an array O(n^2). Can be optimized using merge sort.
+ * Inversion : i<j and a[i]>a[j] */
+int getInvCount(vector<int> arr, int n)
+{
+    int inv_count = 0;
+    for (int i = 0; i < n - 1; i++)
+        for (int j = i + 1; j < n; j++)
+            if (arr[i] > arr[j])
+                inv_count++;
+
+    return inv_count;
+}
+
+/* Minimum Adjacent Swaps needed to get another target permutation string s2 of string s1 */
+int getMinAdjSwaps(string s1, string s2)
+{
+    vector<vector<int>> Q(26);
+    vector<int> P(s1.size());
+
+    for ( int i = 0; i < s1.size(); ++i )
+        Q[s2[i]-'a'].push_back(i); // basically, Q is a vector [0 .. 25] of lists
+
+    vector<int> temp(26,0);
+    for ( int i = 0; i < s1.size(); ++i )
+        P[i] = 1 + Q[s1[i]-'a'][ temp[s1[i]-'a']++ ];
+
+
+
+    return getInvCount(P, s1.size());
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 
 /* Returns prime bool vector using sieve of Eratosthenes algorithm */
 vector<bool> SieveOfEratosthenes(int n=1000000)
