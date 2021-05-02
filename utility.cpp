@@ -235,6 +235,59 @@ int lengthOfLIS(vector<int>& nums)
     return pilesTop.size();
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
+/*	Returns the length of the longest
+    increasing subsequence (LIS) in nums. O(nlogn)	*/
+
+// Binary search (note boundaries in the caller)
+int CeilIndex(vector<int>& v, int l, int r, int key)
+{
+    while (r - l > 1) {
+        int m = l + (r - l) / 2;
+        if (v[m] >= key)
+            r = m;
+        else
+            l = m;
+    }
+
+    return r;
+}
+
+int LongestIncreasingSubsequenceLength(vector<int>& v)
+{
+    if (v.size() == 0)
+        return 0;
+
+    vector<int> tail(v.size(), 0);
+    int length = 1; // always points empty slot in tail
+
+    tail[0] = v[0];
+    for (int i = 1; i < v.size(); i++) {
+
+        // new smallest value
+        if (v[i] < tail[0])
+            tail[0] = v[i];
+
+            // v[i] extends largest subsequence
+        else if (v[i] > tail[length - 1])
+            tail[length++] = v[i];
+
+            // v[i] will become end candidate of an existing
+            // subsequence or Throw away larger elements in all
+            // LIS, to make room for upcoming grater elements
+            // than v[i] (and also, v[i] would have already
+            // appeared in one of LIS, identify the location
+            // and replace it)
+        else
+            tail[CeilIndex(tail, -1, length - 1, v[i])] = v[i];
+    }
+
+    return length;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 /*	Returns the length of the longest
     increasing subsequence (LIS) in nums. O(n^2)	*/
 int lengthOfLIS(vector<int>& nums)
@@ -382,6 +435,183 @@ int count(string a, string b)
     }
 
     return lookup[m][n];
+}
+
+///////////////////////////////////////////////////////////////////////
+// Returns the maximum value that
+// can be put in a knapsack of capacity W
+// Time Complexity: O(N*W)
+// Auxiliary Space: O(N*W)
+// DP top-down memoization
+
+// Returns the value of maximum profit
+int knapSackRec(int W, vector<int> wt,
+                vector<int> val, int i,
+                int** dp)
+{
+    // base condition
+    if (i < 0)
+        return 0;
+    if (dp[i][W] != -1)
+        return dp[i][W];
+
+    if (wt[i] > W) {
+
+        // Store the value of function call
+        // stack in table before return
+        dp[i][W] = knapSackRec(W, wt,
+                               val, i - 1,
+                               dp);
+        return dp[i][W];
+    }
+    else {
+        // Store value in a table before return
+        dp[i][W] = max(val[i]
+                       + knapSackRec(W - wt[i],
+                                     wt, val,
+                                     i - 1, dp),
+                       knapSackRec(W, wt, val,
+                                   i - 1, dp));
+
+        // Return value of table after storing
+        return dp[i][W];
+    }
+}
+
+int knapSack(int W, vector<int> wt, vector<int> val, int n)
+{
+    // double pointer to declare the
+    // table dynamically
+    int** dp;
+    dp = new int*[n];
+
+    // loop to create the table dynamically
+    for (int i = 0; i < n; i++)
+        dp[i] = new int[W + 1];
+
+    // loop to initially filled the
+    // table with -1
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < W + 1; j++)
+            dp[i][j] = -1;
+    return knapSackRec(W, wt, val, n - 1, dp);
+}
+//////////////////////////////////////////////////////////////////////////
+// Returns the maximum value that
+// can be put in a knapsack of capacity W
+// Time Complexity: O(N*W)
+// Auxiliary Space: O(N*W)
+// DP bottom-up
+int knapSack(int W, vector<int> wt, vector<int> val, int n)
+{
+    int i, w;
+    vector<vector<int>> K(n+1, vector<int>(W+1));
+
+    // Build table K[][] in bottom up manner
+    for(i = 0; i <= n; i++)
+    {
+        for(w = 0; w <= W; w++)
+        {
+            if (i == 0 || w == 0)
+                K[i][w] = 0;
+            else if (wt[i - 1] <= w)
+                K[i][w] = max(val[i - 1] +
+                              K[i - 1][w - wt[i - 1]],
+                              K[i - 1][w]);
+            else
+                K[i][w] = K[i - 1][w];
+        }
+    }
+    return K[n][W];
+}
+//////////////////////////////////////////////////////////////////////////
+
+/*  Unbounded Knapsack (Repetition of items allowed)    */
+// Returns the maximum value with knapsack of
+// W capacity
+int unboundedKnapsack(int W, int n,
+                      vector<int> val, vector<int> wt)
+{
+    // dp[i] is going to store maximum value
+    // with knapsack capacity i.
+    vector<int> dp(W+1, 0);
+
+    // Fill dp[] using above recursive formula
+    for (int i=0; i<=W; i++)
+        for (int j=0; j<n; j++)
+            if (wt[j] <= i)
+                dp[i] = max(dp[i], dp[i-wt[j]] + val[j]);
+
+    return dp[W];
+}
+
+/////////////////////////////////////////////////////////////////////////////
+/*  In Fractional Knapsack, we can break items for maximizing the total value of knapsack   */
+
+// Structure for an item which stores weight and
+// corresponding value of Item
+struct Item {
+    int value, weight;
+
+    // Constructor
+    Item(int value, int weight)
+    {
+        this->value=value;
+        this->weight=weight;
+    }
+};
+
+// Comparison function to sort Item according to val/weight
+// ratio
+bool cmp(struct Item a, struct Item b)
+{
+    double r1 = (double)a.value / (double)a.weight;
+    double r2 = (double)b.value / (double)b.weight;
+    return r1 > r2;
+}
+
+// Main greedy function to solve problem
+double fractionalKnapsack(int W, struct Item arr[], int n)
+{
+    //    sorting Item on basis of ratio
+    sort(arr, arr + n, cmp);
+
+    //    Uncomment to see new order of Items with their
+    //    ratio
+    /*
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i].value << "  " << arr[i].weight << " :
+    "
+             << ((double)arr[i].value / arr[i].weight) <<
+    endl;
+    }
+    */
+
+    int curWeight = 0; // Current weight in knapsack
+    double finalvalue = 0.0; // Result (value in Knapsack)
+
+    // Looping through all Items
+    for (int i = 0; i < n; i++) {
+        // If adding Item won't overflow, add it completely
+        if (curWeight + arr[i].weight <= W) {
+            curWeight += arr[i].weight;
+            finalvalue += arr[i].value;
+        }
+
+            // If we can't add current Item, add fractional part
+            // of it
+        else {
+            int remain = W - curWeight;
+            finalvalue += arr[i].value
+                          * ((double)remain
+                             / (double)arr[i].weight);
+            break;
+        }
+    }
+
+    // Returning final value
+    return finalvalue;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
