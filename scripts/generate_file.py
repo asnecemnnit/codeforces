@@ -13,10 +13,8 @@ def add_info(name, file):
         f.write(line)
     f.close()
 
-n = int(sys.argv[1])
-for i in range(n):
-    name = "p" + str(i+1)
-    file_name = "../CurrentContest/" + name + ".cpp"
-    src_file = "../src/template.cpp"
-    copyfile(src_file, file_name)
-    add_info(name, file_name)
+n = str(sys.argv[1])
+file_name = "../ProblemSet/" + n + ".cpp"
+src_file = "../src/template.cpp"
+copyfile(src_file, file_name)
+add_info(n, file_name)
