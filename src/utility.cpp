@@ -58,6 +58,15 @@ mint Npr(int n, int r){
 	return ans;
 }
 ////////////////////////////////////////////////////////////////////////////////
+/*  returns gcd of a & b    */
+int gcd(int a, int b)
+{
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
+
+}
+////////////////////////////////////////////////////////////////////////////////
 
 /*	check vector<int> is a palindrome	*/
 bool isVecPalindrome(VI a)
