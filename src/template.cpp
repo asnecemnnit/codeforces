@@ -1,4 +1,3 @@
-// ABC.cpp
 // Created by Ashish Negi
 
 /********   All Required Header Files ********/
