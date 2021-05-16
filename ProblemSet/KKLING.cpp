@@ -479,6 +479,8 @@ void Graph::DFS(int u, int v, int level)
 		}
 	}
 
+	return;
+
 }
 
 void Graph::DFS2(int u, int v)
@@ -493,6 +495,15 @@ void Graph::DFS2(int u, int v)
 	if (1 == adj[u].size()) {
 		leaves.emplace_back(lvl[u], u + 1);
 	}
+
+	return;
+}
+
+bool comp(pair<int, int> a, pair<int, int> b) {
+	if (a.first == b.first)
+		return a.second < b.second;
+
+	return a.first < b.first;
 }
 /**************************************/
 void solve()
@@ -510,16 +521,21 @@ void solve()
 		g.addEdge(--u, --v);
 	}
 
+
 	g.DFS(0, 0, 0);
 
 	vector<pair<int, int>> ans;
 
 	for (int i = 0; i < adj[0].size(); i++) {
 		g.DFS2(adj[0][i], 0);
+//        for (auto x : leaves) {
+//		    dbg2(x.first, x.second);
+//        }
+//        cout<<"\n";
 		vector<pair<int, int>> v;
 		pair<int, int> p;
 		bool f = 0;
-		sort(leaves.begin(), leaves.end());
+		sort(leaves.begin(), leaves.end(), comp);
 		p = leaves[0];
 		v.push_back(p);
 		int val = p.first;
@@ -532,6 +548,7 @@ void solve()
 				else {
 					v.emplace_back(leaves[j]);
 				}
+				j++;
 			}
 
 			if (j < leaves.size()) {
@@ -545,11 +562,12 @@ void solve()
 		}
 		leaves.clear();
 		for (auto x : v) {
+//		    dbg2(x.first, x.second);
 			ans.push_back(x);
 		}
 	}
 
-	sort(ans.begin(), ans.end());
+	sort(ans.begin(), ans.end(), comp);
 	int day = ans[0].first;
 	vector<int> xyz;
 	for (int i = 0; i < ans.size(); i++) {
@@ -582,7 +600,7 @@ void solve()
 int main()
 {
 #define ONLINE_JUDGE
-#define SUBLIME_TEXT
+// #define SUBLIME_TEXT
 #if !defined(ONLINE_JUDGE) || defined(SUBLIME_TEXT)
 	freopen("../IO/input.txt", "r", stdin);
 	freopen("../IO/output.txt", "w", stdout);

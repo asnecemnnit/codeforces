@@ -520,7 +520,7 @@ void solve()
 int main()
 {
 #define ONLINE_JUDGE
-#define SUBLIME_TEXT
+// #define SUBLIME_TEXT
 #if !defined(ONLINE_JUDGE) || defined(SUBLIME_TEXT)
 	freopen("../IO/input.txt", "r", stdin);
 	freopen("../IO/output.txt", "w", stdout);
