@@ -1566,25 +1566,39 @@ void updateBIT(int n, int index, int val)
 const int N = 100000;
 // Max size of tree
 int tree[2 * N];
+int n1;
 
 // function to build the tree
 void build(vector<int> arr, int n)
 {
+	n1 = n;
+	if (!isPowerOfTwo(n))
+	{
+		n1 = pow(2, ceil(log(n) / log(2)));
+	}
+
 	// insert leaf nodes in tree
-	for (int i = 0; i < n; i++)
-		tree[n + i] = arr[i];
+	for (int i = 0; i < n1; i++) {
+		if (i >= n)
+		{
+			tree[n1 + i] = 0;
+		}
+		else {
+			tree[n1 + i] = nums[i];
+		}
+	}
 
 	// build the tree by calculating parents
-	for (int i = n - 1; i > 0; --i)
+	for (int i = n1 - 1; i > 0; --i)
 		tree[i] = tree[i << 1] + tree[i << 1 | 1];
 }
 
 // function to update a tree node
-void updateTreeNode(int p, int value, int n)
+void updateTreeNode(int p, int value)
 {
 	// set value at position p
-	tree[p + n] = value;
-	p = p + n;
+	tree[p + n1] = value;
+	p = p + n1;
 
 	// move upward and update parents
 	for (int i = p; i > 1; i >>= 1)
@@ -1592,12 +1606,13 @@ void updateTreeNode(int p, int value, int n)
 }
 
 // function to get sum on interval [l, r)
-int query(int l, int r, int n)
+int query(int l, int r)
 {
 	int res = 0;
+	r++;	// r excluded originally
 
 	// loop to find the sum in the range
-	for (l += n, r += n; l < r; l >>= 1, r >>= 1)
+	for (l += n1, r += n1; l < r; l >>= 1, r >>= 1)
 	{
 		if (l & 1)
 			res += tree[l++];
