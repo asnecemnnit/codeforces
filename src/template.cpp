@@ -404,7 +404,7 @@ const int modular_int<mod>::inverse_limit = 1000;
 
 
 /******* Debugging Class Template *******/
-#define DEBUG
+// #define DEBUG
 
 #ifdef DEBUG
 
