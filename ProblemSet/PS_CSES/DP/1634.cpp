@@ -1,4 +1,4 @@
-// 1633.cpp
+// 1634.cpp
 // Created by Ashish Negi
 
 /********   All Required Header Files ********/
@@ -442,11 +442,60 @@ private:
 /**************************************/
 
 /******** User-defined Function *******/
-
+const int NMAX = 1e6;
+int dp[NMAX + 1];
 /**************************************/
 void solve()
 {
+	int n, x;
+	INP2(n, x);
+	VI c(n);
+	INPV(c, n);
+
+	REP(i, x + 1) {
+		dp[i] = -1;
+	}
+
+	sort(all(c));
+
+	if (c[0] > x) {
+		OUT(-1);
+		return;
+	}
+
+	REP(i, n) {
+		dp[c[i]] = 1;
+	}
+
+	for (int i = 1; i <= x; i++)
+	{
+		// cout << i - 1 << " " << dp[i - 1] << endl;
+		if (dp[i] == 1)
+			continue;
+
+		int mn = INT_MAX;
+		for (int j = 0; j < n; j++) {
+			if (i >= c[j] + 1) {
+				if (dp[i - c[j]] != -1) {
+					mn = min(mn, 1 + dp[i - c[j]]);
+					dp[i] = mn;
+				}
+			}
+			else
+				break;
+		}
+	}
+	// cout << dp[x];
+
+	// REP(i, x + 1) {
+	// 	if (dp[i] != -1) {
+	// 		cout << "i = " << i << ", " << "dp[i] = " << dp[i] << "\n";
+	// 	}
+	// }
+
+	OUT(dp[x]);
 	return;
+
 }
 
 /********** Main()  function **********/
@@ -462,12 +511,8 @@ int main()
 	std::ios::sync_with_stdio(false);
 	cin.tie(0);
 
-	int tc;
-	INP(tc);
+	solve();
 
-	while (tc--) {
-		solve();
-	}
 	return 0;
 }
 /********  Main() Ends Here *************/
