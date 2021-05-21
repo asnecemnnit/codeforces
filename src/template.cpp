@@ -436,6 +436,9 @@ private:
 
 #else
 #define debug(args...)                  // Just strip off all debug tokens
+#define dbg(args...)                  	// Just strip off all debug tokens
+#define dbg2(args...)                  	// Just strip off all debug tokens
+#define dbg3(args...)                  	// Just strip off all debug tokens
 #endif
 
 /**************************************/
