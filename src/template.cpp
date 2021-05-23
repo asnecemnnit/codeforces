@@ -61,6 +61,8 @@ using namespace std;
 #define PI 3.1415926535897932384626433832795
 // #define MOD 1000000007
 #define read(type) readInt<type>()
+#define clk_start()	clock_t time_req = clock();
+#define clk_end()	cout << "time taken to solve = " << (float)time_req/CLOCKS_PER_SEC << " seconds" << endl;
 const double pi = acos(-1.0);
 typedef pair<int, int> PII;
 typedef vector<int> VI;
@@ -442,7 +444,7 @@ private:
 #endif
 
 /**************************************/
-
+// #define CLOCK
 /******** User-defined Function *******/
 
 /**************************************/
@@ -468,7 +470,13 @@ int main()
 	INP(tc);
 
 	while (tc--) {
+#ifdef CLOCK
+		clk_start();
+#endif /* CLOCK */
 		solve();
+#ifdef CLOCK
+		clk_end();
+#endif /* CLOCK */
 	}
 	return 0;
 }
