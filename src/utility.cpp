@@ -657,6 +657,112 @@ double fractionalKnapsack(int W, struct Item arr[], int n)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/*	Shortest path in unweighted graph (with cycles)
+	Idea : Modified BFS
+	*/
+const int NMAX = 1e5;
+vector<vector<int>> adj;
+bool visited[NMAX];
+int dist[NMAX], pred[NMAX];;
+int n, m;
+
+/*	Modified BFS which stores predecessor of each node and distance of each node from
+	src node.
+	returns true if dest node is reached
+	otherwise returns false
+	*/
+bool BFS(int src, int dest)
+{
+	queue<int> q;
+
+	for (int i = 0; i < n; i++) {
+		visited[i] = false;
+		dist[i] = INT_MAX;
+		pred[i] = -1;
+	}
+
+	visited[src] = true;
+	dist[src] = 0;
+	q.push(src);
+
+	while (!q.empty()) {
+		int u = q.front();
+		q.pop();
+		for (int i = 0; i < adj[u].size(); i++) {
+			if (visited[adj[u][i]] == false) {
+				visited[adj[u][i]] = true;
+				dist[adj[u][i]] = dist[u] + 1;
+				pred[adj[u][i]] = u;
+				q.push(adj[u][i]);
+
+				if (adj[u][i] == dest)
+					return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+/*	Finds shortest path from src node to dest node.
+	If no such path exists, print "IMPOSSIBLE"
+	Otherwise print the length of shortest path and the
+	corresponding path from src node to dest node
+	*/
+void shortest_path_unweighted()
+{
+	INP2(n, m);
+
+	adj.resize(n);
+
+	REP(i, m) {
+		int u, v;
+		INP2(u, v);
+		u--;
+		v--;
+		adj[u].push_back(v);
+		adj[v].push_back(u);
+	}
+
+	/* input src and dest */
+	int src, dest;
+	INP2(src, dest);
+	src--;
+	dest--;
+
+	assert(src >= 0);
+	assert(src <= n);
+	assert(dest >= 0);
+	assert(dest <= n);
+
+	if (!BFS(src, dest)) {
+		/* src and dest are not connected by any path */
+		OUT("IMPOSSIBLE");
+		return;
+	}
+
+	/*	stores predecessor path	from src to dest	*/
+	vector<int> pred_path;
+
+	int end = dest, start = src;
+	pred_path.push_back(n);
+	while (end != start) {
+		pred_path.push_back(pred[end] + 1);
+		end = pred[end];
+	}
+	reverse(all(pred_path));
+
+	/*	shortest path length */
+	OUT(pred_path.size());
+
+	/* shortest path from src to dest */
+	REP(i, pred_path.size()) {
+		cout << pred_path[i] << " ";
+	}
+	cout << "\n";
+	return;
+}
+////////////////////////////////////////////////////////////////////////////////
 
 /*	At each iteration the vertex v is selected
 	which has the smallest distance d[v] among
