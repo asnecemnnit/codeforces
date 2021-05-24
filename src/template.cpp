@@ -61,7 +61,7 @@ using namespace std;
 #define PI 3.1415926535897932384626433832795
 // #define MOD 1000000007
 #define read(type) readInt<type>()
-#define clk_start()	clock_t time_req = clock();
+#define clk_start()	time_req = clock();
 #define clk_end()	cout << "time taken to solve = " << (float)time_req/CLOCKS_PER_SEC << " seconds" << endl;
 const double pi = acos(-1.0);
 typedef pair<int, int> PII;
@@ -406,8 +406,6 @@ const int modular_int<mod>::inverse_limit = 1000;
 
 
 /******* Debugging Class Template *******/
-// #define DEBUG
-
 #ifdef DEBUG
 
 #define debug(args...)     (Debugger()) , args
@@ -443,9 +441,20 @@ private:
 #define dbg3(args...)                  	// Just strip off all debug tokens
 #endif
 
-/**************************************/
+/************** Macros ****************/
+#define ONLINE_JUDGE
+// #define SUBLIME_TEXT
+// #define DEBUG
 // #define CLOCK
-/******** User-defined Function *******/
+
+
+/***** Global variables/constants *****/
+#ifdef CLOCK
+clock_t time_req;
+#endif /* CLOCK */
+
+/******* User-defined Functions *******/
+
 
 /**************************************/
 void solve()
@@ -456,8 +465,6 @@ void solve()
 /********** Main()  function **********/
 int main()
 {
-#define ONLINE_JUDGE
-// #define SUBLIME_TEXT
 #if !defined(ONLINE_JUDGE) || defined(SUBLIME_TEXT)
 	freopen("../IO/input.txt", "r", stdin);
 	freopen("../IO/output.txt", "w", stdout);
