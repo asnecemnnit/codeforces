@@ -447,11 +447,14 @@ private:
 // #define DEBUG
 // #define CLOCK
 
-
-/***** Global variables/constants *****/
+/** Conditional variables/ constants **/
 #ifdef CLOCK
 clock_t time_req;
 #endif /* CLOCK */
+
+/***** Global variables/constants *****/
+const int NMAX = 1e9;
+int n, m;
 
 /******* User-defined Functions *******/
 
