@@ -44,6 +44,7 @@ using namespace std;
 #define OUT(t) cout<<t<<endl
 #define OUT2(t,u) cout<<t<<" "<<u<<endl
 #define OUT3(t,u,v) cout<<t<<" "<<u<<" "<<v<<endl
+#define OUTF(t, p) cout << fixed;	cout << setprecision(p);	OUT(t);
 #define MEM(a, b) memset(a, (b), sizeof(a))
 #define FOR(i, j, k, in) for (int i=j ; i<k ; i+=in)
 #define RFOR(i, j, k, in) for (int i=j ; i>=k ; i-=in)
