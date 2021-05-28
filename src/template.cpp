@@ -471,6 +471,7 @@ int main()
 #if !defined(ONLINE_JUDGE) || defined(SUBLIME_TEXT)
 	freopen("../IO/input.txt", "r", stdin);
 	freopen("../IO/output.txt", "w", stdout);
+	freopen("../IO/log.txt", "w", stderr);
 #endif
 
 	std::ios::sync_with_stdio(false);
