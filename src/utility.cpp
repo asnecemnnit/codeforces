@@ -711,13 +711,13 @@ bool BFS(int src, int dest)
 	*/
 void shortest_path_unweighted()
 {
-	INP2(n, m);
+	cin >> n >> m;
 
 	adj.resize(n);
 
 	REP(i, m) {
 		int u, v;
-		INP2(u, v);
+		cin >> u >> v;
 		u--;
 		v--;
 		adj[u].push_back(v);
@@ -726,7 +726,7 @@ void shortest_path_unweighted()
 
 	/* input src and dest */
 	int src, dest;
-	INP2(src, dest);
+	cin >> src >> dest;
 	src--;
 	dest--;
 
@@ -737,7 +737,7 @@ void shortest_path_unweighted()
 
 	if (!BFS(src, dest)) {
 		/* src and dest are not connected by any path */
-		OUT("IMPOSSIBLE");
+		cout << "IMPOSSIBLE" << "\n";
 		return;
 	}
 
@@ -753,7 +753,7 @@ void shortest_path_unweighted()
 	reverse(all(pred_path));
 
 	/*	shortest path length */
-	OUT(pred_path.size());
+	cout << pred_path.size() << "\n";
 
 	/* shortest path from src to dest */
 	REP(i, pred_path.size()) {

@@ -31,32 +31,32 @@
 using namespace std;
 
 /*******  All Required define Pre-Processors and typedef Constants *******/
-#define SCD(t) scanf("%d",&t)
-#define SCLD(t) scanf("%ld",&t)
-#define SCLLD(t) scanf("%lld",&t)
-#define SCC(t) scanf("%c",&t)
-#define SCS(t) scanf("%s",t)
-#define SCF(t) scanf("%f",&t)
-#define SCLF(t) scanf("%lf",&t)
-#define INP(t) cin>>t
-#define INP2(t,u) cin>>t>>u
-#define INP3(t,u,v) cin>>t>>u>>v
-#define OUT(t) cout<<t<<endl
-#define OUT2(t,u) cout<<t<<" "<<u<<endl
-#define OUT3(t,u,v) cout<<t<<" "<<u<<" "<<v<<endl
-#define OUTF(t, p) cout << fixed;	cout << setprecision(p);	OUT(t);
-#define MEM(a, b) memset(a, (b), sizeof(a))
-#define FOR(i, j, k, in) for (int i=j ; i<k ; i+=in)
-#define RFOR(i, j, k, in) for (int i=j ; i>=k ; i-=in)
-#define REP(i, j) FOR(i, 0, j, 1)
-#define RREP(i, j) RFOR(i, j, 0, 1)
-#define INPV(a,n) REP(i, n) INP(a[i])
+#define scd(t) scanf("%d",&t)
+#define scld(t) scanf("%ld",&t)
+#define sclld(t) scanf("%lld",&t)
+#define scc(t) scanf("%c",&t)
+#define scs(t) scanf("%s",t)
+#define scf(t) scanf("%f",&t)
+#define sclf(t) scanf("%lf",&t)
+#define inp(t) cin>>t
+#define inpp(t,u) cin>>t>>u
+#define inppp(t,u,v) cin>>t>>u>>v
+#define out(t) cout<<t<<endl
+#define outt(t,u) cout<<t<<" "<<u<<endl
+#define outtt(t,u,v) cout<<t<<" "<<u<<" "<<v<<endl
+#define outf(t, p) cout << fixed;	cout << setprecision(p);	out(t);
+#define mems(a, b) memset(a, (b), sizeof(a))
+#define lpj(i, j, k) for (int i=j ; i<k ; i+=1)
+#define rlpj(i, j, k) for (int i=j ; i>=k ; i-=in)
+#define lp(i, j) lpj(i, 0, j)
+#define rlp(i, j) rlpj(i, j, 0)
+#define inpv(a,n) lp(i, n) inp(a[i])
 #define all(cont) cont.begin(), cont.end()
 #define rall(cont) cont.end(), cont.begin()
-#define FOREACH(it, l) for (auto it = l.begin(); it != l.end(); it++)
+#define each(it, l) for (auto it = l.begin(); it != l.end(); it++)
 #define IN(A, B, C) assert( B <= A && A <= C)
-#define MP make_pair
-#define PB push_back
+#define mpr make_pair
+#define pbk push_back
 #define INF (int)1e9
 #define EPS 1e-9
 #define PI 3.1415926535897932384626433832795
@@ -65,15 +65,15 @@ using namespace std;
 #define clk_start()	time_req = clock();
 #define clk_end()	cout << "time taken to solve = " << (float)time_req/CLOCKS_PER_SEC << " seconds" << endl;
 const double pi = acos(-1.0);
-typedef pair<int, int> PII;
-typedef vector<int> VI;
-typedef vector<unsigned long long int> VI64;
-typedef vector<string> VS;
-typedef vector<PII> VII;
-typedef vector<VI> VVI;
-typedef map<int, int> MPII;
-typedef set<int> SETI;
-typedef multiset<int> MSETI;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+typedef vector<unsigned long long int> vi64;
+typedef vector<string> vs;
+typedef vector<pii> vpii;
+typedef vector<vi> vvi;
+typedef map<int, int> mpii;
+typedef set<int> seti;
+typedef multiset<int> mseti;
 typedef long int int32;
 typedef unsigned long int uint32;
 typedef long long int int64;
@@ -479,7 +479,7 @@ int main()
 	cin.tie(0);
 
 	int tc;
-	INP(tc);
+	inp(tc);
 
 	while (tc--) {
 #ifdef CLOCK
