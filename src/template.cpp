@@ -413,6 +413,7 @@ const int modular_int<mod>::inverse_limit = 1000;
 #define dbg(var1) cerr<<#var1<<" = "<<(var1)<<endl;
 #define dbg2(var1,var2) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<endl;
 #define dbg3(var1,var2,var3) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<", "<<#var3<<" = "<<(var3)<<endl;
+#define dbg4(var1,var2,var3,var4) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<", "<<#var3<<" = "<<(var3)<<", "<<#var4<<" = "<<(var4)<<endl;
 
 class Debugger
 {
@@ -440,10 +441,13 @@ private:
 #define dbg(args...)                  	// Just strip off all debug tokens
 #define dbg2(args...)                  	// Just strip off all debug tokens
 #define dbg3(args...)                  	// Just strip off all debug tokens
+#define dbg4(args...)                  	// Just strip off all debug tokens
 #endif
 
 /************** Macros ****************/
+#ifndef ONLINE_JUDGE
 #define ONLINE_JUDGE
+#endif	/*	ONLINE_JUDGE	*/
 // #define SUBLIME_TEXT
 // #define DEBUG
 // #define CLOCK
