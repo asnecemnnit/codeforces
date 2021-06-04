@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "bits/stdc++.h"
+#include <numeric>		// contains inbuilt gcd(a, b) function
 // #include "ext/pb_ds/assoc_container.hpp"
 // #include "ext/pb_ds/tree_policy.hpp"
 
