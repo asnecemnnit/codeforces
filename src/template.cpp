@@ -32,6 +32,7 @@
 using namespace std;
 
 /*******  All Required define Pre-Processors and typedef Constants *******/
+const string nl = "\n";
 #define scd(t) scanf("%d",&t)
 #define scld(t) scanf("%ld",&t)
 #define sclld(t) scanf("%lld",&t)
@@ -42,9 +43,9 @@ using namespace std;
 #define inp(t) cin>>t
 #define inpp(t,u) cin>>t>>u
 #define inppp(t,u,v) cin>>t>>u>>v
-#define out(t) cout<<t<<endl
-#define outt(t,u) cout<<t<<" "<<u<<endl
-#define outtt(t,u,v) cout<<t<<" "<<u<<" "<<v<<endl
+#define out(t) cout<<t<<nl
+#define outt(t,u) cout<<t<<" "<<u<<nl
+#define outtt(t,u,v) cout<<t<<" "<<u<<" "<<v<<nl
 #define outf(t, p) cout << fixed;	cout << setprecision(p);	out(t);
 #define mems(a, b) memset(a, (b), sizeof(a))
 #define lpj(i, j, k) for (int i=j ; i<k ; i+=1)
@@ -52,6 +53,9 @@ using namespace std;
 #define lp(i, j) lpj(i, 0, j)
 #define rlp(i, j) rlpj(i, j, 0)
 #define inpv(a,n) lp(i, n) inp(a[i])
+#define inpvv(a,n) lp(i, n)lp(j, n)	inp(a[i][j]);
+#define outv(a,n) lp(i, n) {	if(i != 0 ){	cout << " ";}	cout << a[i];	}	cout<<nl;
+#define outvv(a,n) lp(i, n){	lp(j, n){	if(j != 0 ){	cout << " ";}	cout << a[i][j];	}	cout<<nl;	}
 #define all(cont) cont.begin(), cont.end()
 #define rall(cont) cont.end(), cont.begin()
 #define each(it, l) for (auto it = l.begin(); it != l.end(); it++)
@@ -411,10 +415,10 @@ const int modular_int<mod>::inverse_limit = 1000;
 #ifdef DEBUG
 
 #define debug(args...)     (Debugger()) , args
-#define dbg(var1) cerr<<#var1<<" = "<<(var1)<<endl;
-#define dbg2(var1,var2) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<endl;
-#define dbg3(var1,var2,var3) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<", "<<#var3<<" = "<<(var3)<<endl;
-#define dbg4(var1,var2,var3,var4) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<", "<<#var3<<" = "<<(var3)<<", "<<#var4<<" = "<<(var4)<<endl;
+#define dbg(var1) cerr<<#var1<<" = "<<(var1)<<nl;
+#define dbg2(var1,var2) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<nl;
+#define dbg3(var1,var2,var3) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<", "<<#var3<<" = "<<(var3)<<nl;
+#define dbg4(var1,var2,var3,var4) cerr<<#var1<<" = "<<(var1)<<", "<<#var2<<" = "<<(var2)<<", "<<#var3<<" = "<<(var3)<<", "<<#var4<<" = "<<(var4)<<nl;
 
 class Debugger
 {
@@ -430,7 +434,7 @@ std: cerr << separator;
 		first = false;
 		return *this;
 	}
-~Debugger() {  std: cerr << endl;}
+~Debugger() {  std: cerr << nl;}
 
 private:
 	bool first;
@@ -459,7 +463,7 @@ clock_t time_req;
 #endif /* CLOCK */
 
 /***** Global variables/constants *****/
-const int NMAX = 1e9;
+const int NMAX = 3e5;
 int n, m;
 
 /******* User-defined Functions *******/
