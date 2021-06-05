@@ -358,7 +358,7 @@ int lengthOfLIS(vector<int>& nums)
 /* Returns length of longest common subsequence for X[0..m-1], Y[0..n-1] */
 int lcs(string X, string Y, int m, int n )
 {
-	vector<int> L(m + 1, vector<int>(n + 1));
+	vector<vector<int>> L(m + 1, vector<int>(n + 1));
 	int i, j;
 
 	/* Following steps build L[m+1][n+1] in
@@ -386,6 +386,100 @@ int lcs(string X, string Y, int m, int n )
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/* Returns LCS (not just the length) for X[0..m-1], Y[0..n-1] */
+string lcs(string X, string Y, int m, int n )
+{
+	vector<vector<int>> L(m + 1, vector<int>(n + 1));
+
+	/* Following steps build L[m+1][n+1] in bottom up fashion. Note
+	   that L[i][j] contains length of LCS of X[0..i-1] and Y[0..j-1] */
+	for (int i = 0; i <= m; i++)
+	{
+		for (int j = 0; j <= n; j++)
+		{
+			if (i == 0 || j == 0)
+				L[i][j] = 0;
+			else if (X[i - 1] == Y[j - 1])
+				L[i][j] = L[i - 1][j - 1] + 1;
+			else
+				L[i][j] = max(L[i - 1][j], L[i][j - 1]);
+		}
+	}
+
+	// Following code is used to print LCS
+	int index = L[m][n];
+
+	// Create a string to store the lcs string
+	string lcss;
+
+	// Start from the right-most-bottom-most corner and
+	// one by one store characters in lcs[]
+	int i = m, j = n;
+	while (i > 0 && j > 0)
+	{
+		// If current character in X[] and Y are same, then
+		// current character is part of LCS
+		if (X[i - 1] == Y[j - 1])
+		{
+			lcss.push_back(X[i - 1]); // Put current character in result
+			i--; j--;    // reduce values of i, j
+		}
+
+		// If not same, then find the larger of two and
+		// go in the direction of larger value
+		else if (L[i - 1][j] > L[i][j - 1])
+			i--;
+		else
+			j--;
+	}
+
+	reverse(lcss.begin(), lcss.end());
+
+	return lcss;
+}
+
+/* Returns SCS (shortest common supersequqnce, not just the length) for str1 and str2 */
+string shortestCommonSupersequence(string str1, string str2) {
+	int m = str1.length();
+	int n = str2.length();
+	string lcss = lcs(str1, str2, m, n);
+	int lenlcs = lcss.length();
+
+	string out = "";
+
+	int idx = 0, scs = m + n - lenlcs;
+
+	int i = 0, j = 0;
+	while (idx < scs and i < m and j < n) {
+		while (i < m and lcss[idx] != str1[i]) {
+			out.push_back(str1[i]);
+			i++;
+		}
+		while (j < n and lcss[idx] != str2[j]) {
+			out.push_back(str2[j]);
+			j++;
+		}
+
+		out.push_back(lcss[idx]);
+
+		i++;
+		j++;
+		idx++;
+
+	}
+
+	while (i < m) {
+		out.push_back(str1[i++]);
+	}
+
+	while (j < n) {
+		out.push_back(str2[j++]);
+	}
+
+	return out.substr(0, scs);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 /* Returns length of longest
    common substring of X[0..m-1]
@@ -399,7 +493,7 @@ int LCSubStr(string X, string Y, int m, int n)
 	// length of longest common suffix
 	// of X[0..i-1] and Y[0..j-1].
 
-	vector<int> LCSuff(m + 1, vector<int>(n + 1));
+	vector<vector<int>> LCSuff(m + 1, vector<int>(n + 1));
 	int result = 0; // To store length of the
 	// longest common substring
 
