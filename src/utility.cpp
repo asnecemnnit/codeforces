@@ -1,12 +1,24 @@
 // Created by Ashish Negi
 
+/************* Useful MACROS **********/
+
+//	__builtin_clz(x)		//	the number of zeros at the beginning of the number
+//	__builtin_ctz(x)		//	the number of zeros at the end of the number
+//	__builtin_popcount(x)	//	the number of ones in the number
+//	__builtin_parity(x)		//	the parity (even or odd) of the number of ones
+
+//	x & (x - 1) 			//	sets the last one bit of x to zero
+//	x & (-x) 				//	sets all the one bits to zero, except for the last one bit
+//	x & (x - 1) == 0		//	=>	positive number x is of form 2^k
+//	x | (x - 1)				//	inverts all the bits after the last one bit
+
 /******** User-defined Function *******/
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /*	precomputes factorial till	M	*/
 #define M 100000
-mint fact[M + 1], i_f[M + 1];
+int fact[M + 1], i_f[M + 1];
 
 void precomputeFactorial() {
 	fact[0] = 1;
@@ -20,7 +32,7 @@ void precomputeFactorial() {
 
 // Combinations
 /*	Computes ncr using fact and i_f	*/
-mint ncr(int n, int r) {
+int ncr(int n, int r) {
 	if (n < r || r < 0 || n < 0) {
 		return 0;
 	}
@@ -28,8 +40,8 @@ mint ncr(int n, int r) {
 }
 
 /*	Computes ncr from scratch */
-mint Ncr(int n, int r) {
-	mint ans = 1;
+int Ncr(int n, int r) {
+	int ans = 1;
 	for (int i = 1; i <= r; ++i) {
 		ans *= n;
 		ans /= i;
@@ -40,7 +52,7 @@ mint Ncr(int n, int r) {
 
 // Permutations
 /*	Computes npr using fact and i_f	*/
-mint npr(int n, int r) {
+int npr(int n, int r) {
 	if (n < r || r < 0 || n < 0) {
 		return 0;
 	}
@@ -48,11 +60,10 @@ mint npr(int n, int r) {
 }
 
 /*	Computes npr from scratch */
-mint Npr(int n, int r) {
-	mint ans = 1;
+int Npr(int n, int r) {
+	int ans = 1;
 	for (int i = 1; i <= r; ++i) {
 		ans *= n;
-		// ans /= i;
 		--n;
 	}
 	return ans;
