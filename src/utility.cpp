@@ -996,6 +996,39 @@ void dijkstra(int graph[V][V], int src)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/*	Simple & efficient Dijkstra	O(n+mlogm) because
+	the algorithm goes through all nodes in the graph
+	and adds for each edge at most one distance to
+	the priority queue
+*/
+const int N = 2e5;
+/*	C++ priority queue finds maximum element as default, but our use
+	case needs minimum as default, hence negative weights are used
+*/
+priority_queue<pair<int, int>> q;	/*	(distance, node)	*/
+vector<int> e[N + 1];			/*	e[] contains minimum distance from 'x'
+									to all nodes in the graph	*/
+
+
+void dijkstra(int x) {
+	for (int i = 1; i <= n; i++) e[i] = 1e9;
+	e[x] = 0;
+	q.push({0, x});
+	while (!q.empty()) {
+		int a = q.top().second; q.pop();
+		if (z[a]) continue;
+		z[a] = 1;
+		for (auto b : v[a]) {
+			if (e[a] + b.second < e[b.first]) {
+				e[b.first] = e[a] + b.second;
+				q.push({ -e[b.first], b.first});	/*	push negative weights
+														in priority queue	*/
+			}
+		}
+	}
+	return;
+}
+////////////////////////////////////////////////////////////////////////////////
 
 // a structure to represent a weighted edge in graph
 struct Edge {
