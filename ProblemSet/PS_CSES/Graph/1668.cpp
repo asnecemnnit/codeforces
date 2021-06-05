@@ -474,11 +474,7 @@ void dfs(int u, int v, int group) {
 			return;
 		}
 		if (next != v and !visited[next]) {
-			if (group == 1)
-				dfs(next, u, 2);
-			else
-				dfs(next, u, 1);
-
+			dfs(next, u, group ^ 1);
 		}
 	}
 
@@ -505,12 +501,11 @@ void solve()
 		visited[i] = false;
 	}
 
-	bool first_component = false;
 	impossible = false;
 	int group;
 	REP (i, n) {
 		if (!visited[i]) {
-			group = 1;
+			group = 0;
 
 			dfs(i, i, group);
 			if (impossible) {
@@ -522,7 +517,7 @@ void solve()
 	}
 
 	REP(i, n) {
-		cout << dp[i] << " ";
+		cout << dp[i] + 1 << " ";
 	}
 	cout << "\n";
 
