@@ -1078,6 +1078,68 @@ void BellmanFord(struct Graph* graph, int src)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/*	Simple Bellman Ford	O(nm)
+	n -> nodes
+	m -> edges (where is m used in below function?)
+*/
+const int N = 2e5;
+vector<pair<int, int>> v[N];	//	(adj, weight)
+vector<int> e[N + 1];			/*	e[] contains minimum distance from 'x'
+									to all nodes in the graph	*/
+void BellmanFord(int x, int n) {
+	for (int i = 1; i <= n; i++) e[i] = 1e9;
+	e[x] = 0;
+
+
+	/*	n-1 rounds for finding minimum path to all nodes	*/
+	for (int i = 1; i <= n - 1; i++) {
+		for (int a = 1; a <= n; a++) {
+			for (auto b : v[a]) {
+				e[b.first] = min(e[b.first], e[a] + b.second);
+			}
+		}
+	}
+
+	/*	nth round to detect negative weight cycle anywhere in the graph	*/
+	for (int a = 1; a <= n; a++) {
+		for (auto b : v[a]) {
+			if (e[b.first] > e[a] + b.second) {
+				printf("Graph contains negative weight cycle");
+				return; // If negative cycle is detected, simply return
+			}
+		}
+	}
+
+	return;
+}
+////////////////////////////////////////////////////////////////////////////////
+/*	Shortest path faster algorithm (SPFA)
+	More efficient (depending on graph structure) than Bellman Ford
+	but worst case still O(nm)
+	n -> nodes
+*/
+const int N = 2e5;
+vector<pair<int, int>> v[N];	//	(adj, weight)
+vector<int> e[N + 1];			/*	e[] contains minimum distance from 'x'
+									to all nodes in the graph	*/
+void spfa(int x) {
+	for (int i = 1; i <= n; i++) e[i] = 1e9;
+	e[x] = 0;
+	q.push(x);
+	while (!q.empty()) {
+		int a = q.front(); q.pop();
+		z[a] = 0;
+		for (auto b : v[a]) {
+			if (e[a] + b.second < e[b.first]) {
+				e[b.first] = e[a] + b.second;
+				if (!z[b]) {q.push(b); z[b] = 1;}
+			}
+		}
+	}
+	return;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 /* 	find a spanning tree of this graph which connects
  	all vertices and has the least weight (i.e. the sum
@@ -1313,7 +1375,7 @@ int myComp(const void* a, const void* b)
 // algorithm
 // Greedy approach
 // Step #2 uses the Union-Find algorithm to detect cycles
-void KruskalMST(Graph* graph)
+void KruskalMST(Graph * graph)
 {
 	int V = graph->V;
 	Edge result[V]; // Tnis will store the resultant MST
