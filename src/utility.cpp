@@ -14,9 +14,27 @@
 
 /******** User-defined Function *******/
 
+/*	precomputes divisors/factors upto n	*/
+const int mod1 = 998244353;
+const int NMAX = 1e6;
+uint64 divCount[NMAX + 1];
+
+/*	Could be optimised by Sieve ?? */
+void divCount_upto_n(int n)
+{
+	lp(i, n + 1) divCount[i] = 0;
+
+	for (int i = 2; i <= n; i++) {
+		for (int j = i; j <= n; j += i) {
+			divCount[j] = (divCount[j] + 1) % mod1;
+		}
+	}
+	return;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
-/*	precomputes factorial till	M	*/
+/*	precomputes factorial upto	M	*/
 #define M 100000
 int fact[M + 1], i_f[M + 1];
 
