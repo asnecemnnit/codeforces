@@ -144,6 +144,19 @@ bool isPowerOfTwo(int n)
 		return false;
 }
 
+/*	returns power of 2 greater than or equal to n */
+int nextPowerOf2(int n)
+{
+	int p = 1;
+	if (n && !(n & (n - 1)))
+		return n;
+
+	while (p < n)
+		p <<= 1;
+
+	return p;
+}
+
 /*	count number of digits in an integer	*/
 int countDigits(int n)
 {
