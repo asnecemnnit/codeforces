@@ -49,7 +49,7 @@ const string nl = "\n";
 #define outf(t, p) cout << fixed;	cout << setprecision(p);	out(t);
 #define mems(a, b) memset(a, (b), sizeof(a))
 #define lpj(i, j, k) for (int i=j ; i<k ; i+=1)
-#define rlpj(i, j, k) for (int i=j ; i>=k ; i-=in)
+#define rlpj(i, j, k) for (int i=j ; i>=k ; i-=1)
 #define lp(i, j) lpj(i, 0, j)
 #define rlp(i, j) rlpj(i, j, 0)
 #define inpv(a,n) lp(i, n) inp(a[i])
