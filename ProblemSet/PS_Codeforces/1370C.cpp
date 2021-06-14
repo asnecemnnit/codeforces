@@ -1,3 +1,4 @@
+// 1370C.cpp
 // Created by Ashish Negi
 
 /********   All Required Header Files ********/
@@ -463,17 +464,68 @@ private:
 #ifdef CLOCK
 clock_t time_req;
 #endif /* CLOCK */
+const string w = "Ashishgup", l = "FastestFinger";
 
 /***** Global variables/constants *****/
-const int NMAX = 3e5;
+const int NMAX = 1e9;
 int n, m;
 
 /******* User-defined Functions *******/
-
+/*	check number is a power of 2	*/
+bool isPowerOfTwo(int n)
+{
+	if (floor(log2(n)) == ceil(log2(n)))
+		return true;
+	else
+		return false;
+}
 
 /**************************************/
 void solve()
 {
+	inp(n);
+
+	if (n == 1) {
+		out(l);
+		return;
+	}
+
+	if (n == 2) {
+		out(w);
+		return;
+	}
+
+	if (n & 1) {
+		out(w);
+		return;
+	}
+
+	if (isPowerOfTwo(n)) {
+		out(l);
+		return;
+	}
+
+	if (n % 4 == 0) {
+		out(w);
+		return;
+	}
+
+	/* n = 2 * odd number, if n/2 is prime, it is a lose situation, otherwise win */
+	int odd = n / 2, flag = 1;
+
+	for (int i = 2; i <= sqrt(odd); i++) {
+		if (odd % i == 0) {
+			flag = 0;
+			break;
+		}
+	}
+
+	if (flag == 0) {
+		out(w);
+		return;
+	}
+
+	out(l);
 	return;
 }
 

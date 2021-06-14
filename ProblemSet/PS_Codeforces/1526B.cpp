@@ -1,3 +1,4 @@
+// 1526B.cpp
 // Created by Ashish Negi
 
 /********   All Required Header Files ********/
@@ -466,7 +467,7 @@ clock_t time_req;
 
 /***** Global variables/constants *****/
 const int NMAX = 3e5;
-int n, m;
+int x;
 
 /******* User-defined Functions *******/
 
@@ -474,6 +475,33 @@ int n, m;
 /**************************************/
 void solve()
 {
+	inp(x);
+
+	if (x % 11 == 0 or x % 111 == 0) {
+		outy();
+		return;
+	}
+
+	while (x > 11) {
+
+
+		if (x % 11 == 0) {
+			dbg(x);
+			outy();
+			return;
+		}
+
+		x -= 111;
+
+
+	}
+
+	if (x == 0 or x == 11) {
+		outy();
+		return;
+	}
+
+	outn();
 	return;
 }
 
