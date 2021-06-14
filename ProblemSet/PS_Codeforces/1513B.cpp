@@ -1,3 +1,4 @@
+// 1513B.cpp
 // Created by Ashish Negi
 
 /********   All Required Header Files ********/
@@ -62,7 +63,6 @@ const string nl = "\n";
 #define rall(cont) cont.end(), cont.begin()
 #define each(it, l) for (auto it = l.begin(); it != l.end(); it++)
 #define IN(A, B, C) assert( B <= A && A <= C)
-#define CNT(a, x)	count(all(a), x)
 #define mpr make_pair
 #define pbk push_back
 #define INF (int)1e9
@@ -466,15 +466,49 @@ clock_t time_req;
 #endif /* CLOCK */
 
 /***** Global variables/constants *****/
-const int NMAX = 3e5;
+#define M 200001
+mint fact[M + 1], i_f[M + 1];
 int n, m;
 
 /******* User-defined Functions *******/
 
 
+void precomputeFactorial() {
+	fact[0] = 1;
+	i_f[0] = 1;
+
+	for (int i = 1; i < M; ++i) {
+		fact[i] = fact[i - 1] * i;
+		i_f[i] = i_f[i - 1] / i;
+	}
+}
 /**************************************/
 void solve()
 {
+	inp(n);
+
+	vi a(n);
+	inpv(a, n);
+
+	int all_and = a[0];
+	lpj(i, 1, n) {
+		all_and &= a[i];
+	}
+
+	int cnt_and_all = count(all(a), all_and);
+
+	dbg(cnt_and_all);
+
+	if (cnt_and_all < 2) {
+		out(0);
+		return;
+	}
+
+	mint ans = (mint)(cnt_and_all) * (mint)(cnt_and_all - 1) * fact[n - 2];
+
+	out(ans);
+
+
 	return;
 }
 
@@ -489,6 +523,8 @@ int main()
 
 	std::ios::sync_with_stdio(false);
 	cin.tie(0);
+
+	precomputeFactorial();
 
 	int tc;
 	inp(tc);
