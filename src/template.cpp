@@ -459,6 +459,7 @@ private:
 // #define SUBLIME_TEXT
 // #define DEBUG
 // #define CLOCK
+#define MULT_TC
 
 /** Conditional variables/ constants **/
 #ifdef CLOCK
@@ -490,10 +491,12 @@ int main()
 	std::ios::sync_with_stdio(false);
 	cin.tie(0);
 
+#ifdef MULT_TC
 	int tc;
 	inp(tc);
 
 	while (tc--) {
+#endif	/* MULT_TC */
 #ifdef CLOCK
 		clk_start();
 #endif /* CLOCK */
@@ -501,7 +504,9 @@ int main()
 #ifdef CLOCK
 		clk_end();
 #endif /* CLOCK */
+#ifdef MULT_TC
 	}
+#endif	/* MULT_TC */
 	return 0;
 }
 /********  Main() Ends Here *************/
