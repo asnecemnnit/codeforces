@@ -1,3 +1,4 @@
+// 1541A.cpp
 // Created by Ashish Negi
 
 /********   All Required Header Files ********/
@@ -72,8 +73,6 @@ const string nl = "\n";
 #define read(type) readInt<type>()
 #define clk_start()	time_req = clock();
 #define clk_end()	cout << "time taken to solve (in seconds) = "; outf((float)(clock() - time_req)/(float)CLOCKS_PER_SEC, 6);
-#define ROTL(a, i)	rotate(a.begin(), a.begin() + i, a.end())
-#define ROTR(a, i)	rotate(a.begin(), a.begin() + a.size() - i, a.end())
 const double pi = acos(-1.0);
 typedef pair<int, int> pii;
 typedef vector<int> vi;
@@ -478,6 +477,27 @@ int n, m;
 /**************************************/
 void solve()
 {
+	inp(n);
+	vi a(n);
+	lp(i, n) {
+		a[i] = i + 1;
+	}
+	if (n % 2) {
+		a[0] = 3;
+		a[1] = 1;
+		a[2] = 2;
+		lpj(i, 3, n - 1) {
+			swap(a[i], a[i + 1]);
+			i++;
+		}
+	}
+	else {
+		lp(i, n - 1) {
+			swap(a[i], a[i + 1]);
+			i++;
+		}
+	}
+	outv(a, n);
 	return;
 }
 

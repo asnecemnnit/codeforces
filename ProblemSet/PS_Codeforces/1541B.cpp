@@ -1,3 +1,4 @@
+// 1541B.cpp
 // Created by Ashish Negi
 
 /********   All Required Header Files ********/
@@ -72,8 +73,6 @@ const string nl = "\n";
 #define read(type) readInt<type>()
 #define clk_start()	time_req = clock();
 #define clk_end()	cout << "time taken to solve (in seconds) = "; outf((float)(clock() - time_req)/(float)CLOCKS_PER_SEC, 6);
-#define ROTL(a, i)	rotate(a.begin(), a.begin() + i, a.end())
-#define ROTR(a, i)	rotate(a.begin(), a.begin() + a.size() - i, a.end())
 const double pi = acos(-1.0);
 typedef pair<int, int> pii;
 typedef vector<int> vi;
@@ -469,7 +468,7 @@ clock_t time_req;
 #endif /* CLOCK */
 
 /***** Global variables/constants *****/
-const int NMAX = 3e5;
+const int NMAX = 2e5;
 int n, m;
 
 /******* User-defined Functions *******/
@@ -478,6 +477,35 @@ int n, m;
 /**************************************/
 void solve()
 {
+	inp(n);
+	vector<pair<int, int>> a(n);
+#define idx second
+#define val first
+	lp(i, n) {
+		inp(a[i].val);
+		a[i].idx = i + 1;
+	}
+
+	sort(all(a));
+
+	// lp(i, n) {
+	// 	cout << a[i].val << " " << a[i].idx << nl;
+	// }
+	// cout << nl;
+	uint64 ans = 0;
+
+	lp(i, n - 1) {
+		if (a[i].val > (int)sqrt(2 * NMAX))
+			break;
+		lpj(j, i + 1, n) {
+			if (a[i].val * a[j].val == (a[i].idx + a[j].idx))
+				ans++;
+		}
+	}
+
+	out(ans);
+
+
 	return;
 }
 
