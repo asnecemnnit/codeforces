@@ -3,5 +3,7 @@
 
 # Unignore all with extensions
 !*.*
+!/ProblemSet/*
 
 *.DS_Store
+*.gitignore
