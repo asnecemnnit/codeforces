@@ -20,6 +20,7 @@ const int NMAX = 1e6;
 uint64 divCount[NMAX + 1];
 
 /*	Could be optimised by Sieve ?? */
+/*	NlogN complexity	*/
 void divCount_upto_n(int n)
 {
 	lp(i, n + 1) divCount[i] = 0;
@@ -29,6 +30,33 @@ void divCount_upto_n(int n)
 			divCount[j] = (divCount[j] + 1) % mod1;
 		}
 	}
+	return;
+}
+
+
+/*	precomputes sum of divisors/factors upto n */
+const int NMAX = 10000000;
+int sumdiv[NMAX + 1];
+
+/*	NlogN complexity	*/
+void sumOfDivisors_upto_n() {
+
+	for (int i = 1; i <= NMAX; ++i)
+		for (int j = i; j <= NMAX; j += i)
+			sumdiv[j] += i;
+
+	return;
+}
+
+/*	precomputes biggest prime divisor */
+/*	NloglogN complexity	*/
+const int NMAX = 10000000;
+int big[NMAX + 1] = {1, 1};
+void biggestDivisor_upto_n() {
+	for (int i = 1; i <= NMAX; ++i)
+		if (big[i] == 1)
+			for (int j = i; j <= NMAX; j += i)
+				big[j] = i;
 	return;
 }
 
