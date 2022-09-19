@@ -1988,3 +1988,71 @@ int query(int l, int r)
 
 	return res;
 }
+
+/*	TRIE (Prefix Tree) Datastructure	*/
+/*	TRIE (Prefix Tree) Datastructure	*/
+struct TrieNode
+{
+	TrieNode * next[26] = {};
+	bool isWord = false;
+};
+
+class Trie {
+	TrieNode root;
+public:
+	Trie() {
+
+	}
+
+	void insert(string word) {
+		auto node = &root;
+		for (int i = 0; i < word.size(); ++i)
+		{
+			if (!node->next[word[i] - 'a'])
+				node->next[word[i] - 'a'] = new TrieNode();
+			node = node->next[word[i] - 'a'];
+		}
+		node->isWord = true;
+	}
+
+	bool search(string word) {
+		auto node = &root;
+		for (int i = 0; i < word.size(); ++i)
+		{
+			if (!node->next[word[i] - 'a'])
+				return false;
+			node = node->next[word[i] - 'a'];
+		}
+		if (!node->isWord)
+			return false;
+		return true;
+	}
+
+	bool startsWith(string p) {
+		auto node = &root;
+		for (int i = 0; i < p.size(); ++i)
+		{
+			if (!node->next[p[i] - 'a'])
+				return false;
+			node = node->next[p[i] - 'a'];
+		}
+		return true;
+	}
+};
+
+int main() {
+	Trie* t = new Trie();
+
+	//insertion
+	t->insert("apple");
+	//search
+	bool a = t->search("apple");
+	bool b = t->search("app");
+	bool c = t->startsWith("app");
+	t->insert("app");
+	bool d = t->search("app");
+
+
+
+	cout << a << " " << b << " " << c << " " << d << endl;
+}
