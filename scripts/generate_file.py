@@ -5,6 +5,7 @@ from shutil import copyfile
 
 def add_info(name, file):
     new_content = "// " + name + ".cpp" + "\n"
+    new_content = new_content + "#define PROBLEMSET\n"
     f = open(file, 'r+')
     lines = f.readlines()  # read old content
     f.seek(0)  # go back to the beginning of the file

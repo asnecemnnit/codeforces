@@ -167,9 +167,15 @@ void solve()
 int main()
 {
 #if !defined(ONLINE_JUDGE) || defined(SUBLIME_TEXT)
+#if !defined(PROBLEMSET)
 	freopen("../IO/input.txt", "r", stdin);
 	freopen("../IO/output.txt", "w", stdout);
 	freopen("../IO/log.txt", "w", stderr);
+#else
+	freopen("../../IO/input.txt", "r", stdin);
+	freopen("../../IO/output.txt", "w", stdout);
+	freopen("../../IO/log.txt", "w", stderr);
+#endif
 #endif
 
 	std::ios::sync_with_stdio(false);
