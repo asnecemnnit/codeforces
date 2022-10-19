@@ -72,9 +72,10 @@ const string nl = "\n";
 #define read(type) readInt<type>()
 #define clk_start()	time_req = clock();
 #define clk_end()	cout << "time taken to solve (in seconds) = "; outf((float)(clock() - time_req)/(float)CLOCKS_PER_SEC, 6);
-#define ROTL(a, i)	rotate(a.begin(), a.begin() + i, a.end())
-#define ROTR(a, i)	rotate(a.begin(), a.begin() + a.size() - i, a.end())
-#define TERN(cond, y, n)	((cond)?(y):(n))
+#define rotl(a, i)	rotate(a.begin(), a.begin() + i, a.end())
+#define rotr(a, i)	rotate(a.begin(), a.begin() + a.size() - i, a.end())
+#define tern(cond, y, n)	((cond)?(y):(n))
+#define ternyn(cond)	TERN(cond, outy(), outn())
 const double pi = acos(-1.0);
 typedef pair<int, int> pii;
 typedef vector<int> vi;
