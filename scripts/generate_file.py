@@ -14,7 +14,14 @@ def add_info(name, file):
     f.close()
 
 n = str(sys.argv[1])
-file_name = "../ProblemSet/" + n + ".cpp"
-src_file = "../src/template.cpp"
+subfolder = "PS_Codeforces"
+if(len(sys.argv) > 2):
+    subfolder = str(sys.argv[2])
+template = "template_basic"
+# print(len(sys.argv))
+if(len(sys.argv) > 3):
+    template = str(sys.argv[3])
+file_name = "../ProblemSet/" + subfolder + "/" + n + ".cpp"
+src_file = "../src/" + template + ".cpp"
 copyfile(src_file, file_name)
 add_info(n, file_name)

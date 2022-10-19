@@ -15,9 +15,13 @@ def add_info(name, file):
 
 contest_name = str(sys.argv[1])
 n = int(sys.argv[2])
+template = "template_basic"
+# print(len(sys.argv))
+if(len(sys.argv) > 3):
+    template = str(sys.argv[3])
 for i in range(n):
     name = "p" + str(i+1)
     file_name = "../" + contest_name + "/" + name + ".cpp"
-    src_file = "../src/template.cpp"
+    src_file = "../src/" + template + ".cpp"
     copyfile(src_file, file_name)
     add_info(name, file_name)
