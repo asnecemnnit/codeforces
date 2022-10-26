@@ -1903,7 +1903,7 @@ int getSum(int index)
 	return sum;
 }
 
-// Returns sum of arr[0..index]. This function assumes
+// Returns sum of arr[indexL..indexR]. This function assumes
 // that the array is preprocessed and partial sums of
 // array elements are stored in BITree[].
 int getSumRange(int indexL, int indexR)
