@@ -1859,7 +1859,7 @@ void queryResults(int a[], int n, Query q[], int m)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/*	Binary Index Tree (BITree)
+/*	Binary Index Tree (BITree) or Fenwick Tree
 	query and update operations in O(log n) time.	*/
 
 vector<int> BITree;
