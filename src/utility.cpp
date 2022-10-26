@@ -1864,6 +1864,25 @@ void queryResults(int a[], int n, Query q[], int m)
 
 vector<int> BITree;
 
+// Updates a node in Binary Index Tree (BITree) at given index
+// in BITree. The given value 'val' is added to BITree[i] and
+// all of its ancestors in tree.
+void updateBIT(int n, int index, int val)
+{
+	// index in BITree[] is 1 more than the index in arr[]
+	index = index + 1;
+
+	// Traverse all ancestors and add 'val'
+	while (index <= n)
+	{
+		// Add 'val' to current node of BI Tree
+		BITree[index] += val;
+
+		// Update index to that of parent in update View
+		index += index & (-index);
+	}
+}
+
 // Constructs and returns a Binary Indexed Tree for given
 // array of size n.
 void constructBITree(vector<int> arr, int n)
@@ -1909,25 +1928,6 @@ int getSum(int index)
 int getSumRange(int indexL, int indexR)
 {
 	return getSum(indexR) - getSum(indexL - 1);
-}
-
-// Updates a node in Binary Index Tree (BITree) at given index
-// in BITree. The given value 'val' is added to BITree[i] and
-// all of its ancestors in tree.
-void updateBIT(int n, int index, int val)
-{
-	// index in BITree[] is 1 more than the index in arr[]
-	index = index + 1;
-
-	// Traverse all ancestors and add 'val'
-	while (index <= n)
-	{
-		// Add 'val' to current node of BI Tree
-		BITree[index] += val;
-
-		// Update index to that of parent in update View
-		index += index & (-index);
-	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
