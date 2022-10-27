@@ -1890,7 +1890,7 @@ void constructBITree(vector<int> arr, int n)
 	// Create and initialize BITree[] as 0
 	BITree.resize(n + 1, 0);
 
-// Store the actual values in BITree[] using update()
+	// Store the actual values in BITree[] using update()
 	for (int i = 0; i < n; i++)
 		updateBIT(n, i, arr[i]);
 
