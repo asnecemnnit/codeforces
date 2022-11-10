@@ -1883,6 +1883,14 @@ void updateBIT(int n, int index, int val)
 	}
 }
 
+// Updates range in Binary Index Tree (BITree) from index
+// l to r in BITree.
+void updateBITRange(int n, int l, int r, int val)
+{
+	updateBIT(n, l, val);
+	updateBIT(n, r + 1, -val);
+}
+
 // Constructs and returns a Binary Indexed Tree for given
 // array of size n.
 void constructBITree(vector<int> arr, int n)
@@ -1938,63 +1946,243 @@ int getSumRange(int indexL, int indexR)
 
 const int N = 100000;
 // Max size of tree
-int tree[2 * N];
-int n1;
+vector<int> tree(4 * N);
 
-// function to build the tree
-void build(vector<int> arr, int n)
-{
-	n1 = n;
-	if (!isPowerOfTwo(n))
-	{
-		n1 = pow(2, ceil(log(n) / log(2)));
+
+int outOp(string op, int a, int b) {
+	if (op == "add") {
+		return a + b;
+	}
+	if (op == "min") {
+		return min(a, b);
+	}
+	if (op == "max") {
+		return max(a, b);
 	}
 
-	// insert leaf nodes in tree
-	for (int i = 0; i < n1; i++) {
-		if (i >= n)
-		{
-			tree[n1 + i] = 0;
-		}
-		else {
-			tree[n1 + i] = nums[i];
-		}
-	}
-
-	// build the tree by calculating parents
-	for (int i = n1 - 1; i > 0; --i)
-		tree[i] = tree[i << 1] + tree[i << 1 | 1];
+	return -1;
 }
 
-// function to update a tree node
-void updateTreeNode(int p, int value)
-{
-	// set value at position p
-	tree[p + n1] = value;
-	p = p + n1;
-
-	// move upward and update parents
-	for (int i = p; i > 1; i >>= 1)
-		tree[i >> 1] = tree[i] + tree[i ^ 1];
+// O(logN)
+int query(int node, int start, int end, int l, int r, string op) {
+	if (l > r)
+		return 0;
+	if (l == start && r == end) {
+		return tree[node];
+	}
+	int mid = (start + end) / 2;
+	return outOp(op, query(2 * node, start, mid, l, min(r, mid), op), query(2 * node + 1, mid + 1, end, max(l, mid + 1), r, op));
 }
 
-// function to get sum on interval [l, r)
-int query(int l, int r)
+// O(N)
+void build(vector<int> nums, int node, int start, int end, string op)
 {
-	int res = 0;
-	r++;	// r excluded originally
-
-	// loop to find the sum in the range
-	for (l += n1, r += n1; l < r; l >>= 1, r >>= 1)
+	if (start == end)
 	{
-		if (l & 1)
-			res += tree[l++];
+		// Leaf node will have a single element
+		tree[node] = nums[start];
+	}
+	else
+	{
+		int mid = (start + end) / 2;
+		// Recurse on the left child
+		build(nums, 2 * node, start, mid, op);
+		// Recurse on the right child
+		build(nums, 2 * node + 1, mid + 1, end, op);
+		// Internal node will have the sum of both of its children
+		tree[node] = outOp(op, tree[2 * node], tree[2 * node + 1]);
+	}
+}
 
-		if (r & 1)
-			res += tree[--r];
+// O(logN)
+void assign(int node, int start, int end, int pos, int new_val, string op) {
+	if (start == end) {
+		tree[node] = new_val;
+	} else {
+		int mid = (start + end) / 2;
+		if (pos <= mid)
+			assign(2 * node, start, mid, pos, new_val, op);
+		else
+			assign(2 * node + 1, mid + 1, end, pos, new_val, op);
+		tree[node] = outOp(op, tree[2 * node], tree[2 * node + 1]);
+	}
+}
+
+// O(logN)
+void update(int node, int start, int end, int pos, int val, string op) {
+	if (start == end) {
+		tree[node] += val;
+	} else {
+		int mid = (start + end) / 2;
+		if (pos <= mid)
+			update(2 * node, start, mid, pos, val, op);
+		else
+			update(2 * node + 1, mid + 1, end, pos, val, op);
+		tree[node] = outOp(op, tree[2 * node], tree[2 * node + 1]);
+	}
+}
+
+void assignRange(int node, int start, int end, int l, int r, int val, string op)
+{
+	// out of range
+	if (start > end or start > r or end < l)
+		return;
+
+	// Current node is a leaf node
+	if (start == end)
+	{
+		// Add the difference to current node
+		tree[node] = val;
+		return;
 	}
 
-	return res;
+	// If not a leaf node, recur for children.
+	int mid = (start + end) / 2;
+	assignRange(node * 2, start, mid, l, r, val, op);
+	assignRange(node * 2 + 1, mid + 1, end, l, r, val, op);
+
+	// Use the result of children calls to update this node
+	tree[node] = outOp(op, tree[2 * node], tree[2 * node + 1]);
+}
+
+void updateRange(int node, int start, int end, int l, int r, int val, string op)
+{
+	// out of range
+	if (start > end or start > r or end < l)
+		return;
+
+	// Current node is a leaf node
+	if (start == end)
+	{
+		// Add the difference to current node
+		tree[node] += val;
+		return;
+	}
+
+	// If not a leaf node, recur for children.
+	int mid = (start + end) / 2;
+	updateRange(node * 2, start, mid, l, r, val, op);
+	updateRange(node * 2 + 1, mid + 1, end, l, r, val, op);
+
+	// Use the result of children calls to update this node
+	tree[node] = outOp(op, tree[2 * node], tree[2 * node + 1]);
+}
+
+// Lazy Propagation
+vector<uint64> lazy1, lazy2, tree, arr;
+
+
+// O(N)
+void build(int node, int start, int end)
+{
+	if (start == end)
+	{
+		// Leaf node will have a single element
+		tree[node] = arr[start];
+		return;
+	}
+
+	int mid = (start + end) >> 1;
+	// Recurse on the left child
+	build(node << 1, start, mid);
+	// Recurse on the right child
+	build(node << 1 | 1, mid + 1, end);
+	// Internal node will have the sum of both of its children
+	tree[node] = tree[node << 1] + tree[node << 1 | 1];
+
+}
+
+void propagate_down(int node, int start, int mid, int end) {
+	if (lazy2[node] != 0)
+	{
+		uint64 x = lazy2[node];
+		// This node needs to be updated
+		tree[node << 1] = 1LL * (mid - start + 1) * x; // Update it
+		tree[node << 1 | 1] = 1LL * (end - mid) * x; // Update it
+
+		lazy1[node << 1] = 0;              // Mark child as lazy
+		lazy1[node << 1 | 1] = 0;          // Mark child as lazy
+		lazy2[node << 1] = x;              // Mark child as lazy
+		lazy2[node << 1 | 1] = x;          // Mark child as lazy
+
+		lazy2[node] = 0;                                  // Reset it
+	}
+
+	if (lazy1[node] != 0)
+	{
+		uint64 x = lazy1[node];
+		// This node needs to be updated
+		tree[node << 1] += 1LL * (mid - start + 1) * x; // Update it
+		tree[node << 1 | 1] += 1LL * (end - mid) * x; // Update it
+
+		lazy1[node << 1] += x;              // Mark child as lazy
+		lazy1[node << 1 | 1] += x;          // Mark child as lazy
+
+		lazy1[node] = 0;                                  // Reset it
+	}
+}
+
+
+void updateRangeLazy(int node, int start, int end, int l, int r, int val)
+{
+
+	if (start > r or end < l)             // Current segment is not within range [l, r]
+		return;
+	if (start >= l and end <= r)
+	{
+		// Segment is fully within range
+		tree[node] += 1LL * (end - start + 1) * val;
+		lazy1[node] += val;
+		return;
+	}
+
+	int mid = (start + end) >> 1;
+
+
+	propagate_down(node, start, mid, end);
+
+
+	updateRangeLazy(node << 1, start, mid, l, r, val);    // Updating left child
+	updateRangeLazy(node << 1 | 1, mid + 1, end, l, r, val); // Updating right child
+	tree[node] = tree[node << 1] + tree[node << 1 | 1]; // Updating root
+}
+
+void assignRangeLazy(int node, int start, int end, int l, int r, int val)
+{
+
+	if (start > r or end < l)             // Current segment is not within range [l, r]
+		return;
+	if (start >= l and end <= r)
+	{
+		// Segment is fully within range
+		tree[node] = 1LL * (end - start + 1) * val;
+		lazy1[node] = 0;
+		lazy2[node] = val;
+		return;
+	}
+
+	int mid = (start + end) >> 1;
+
+	propagate_down(node, start, mid, end);
+
+	assignRangeLazy(node << 1, start, mid, l, r, val);    // Updating left child
+	assignRangeLazy(node << 1 | 1, mid + 1, end, l, r, val); // Updating right child
+	tree[node] = tree[node << 1] + tree[node << 1 | 1]; // Updating root
+}
+
+uint64 queryRangeLazy(int node, int start, int end, int l, int r)
+{
+	if (start > r or end < l)
+		return 0;         // Out of range
+
+	if (start >= l and end <= r)            // Current segment is totally within range [l, r]
+		return tree[node];
+
+	int mid = (start + end) >> 1;
+
+	propagate_down(node, start, mid, end);
+
+	return queryRangeLazy(node << 1, start, mid, l, r) + queryRangeLazy(node << 1 | 1, mid + 1, end, l, r);
 }
 
 /*	TRIE (Prefix Tree) Datastructure	*/
