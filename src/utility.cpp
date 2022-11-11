@@ -1939,6 +1939,54 @@ int getSumRange(int indexL, int indexR)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/*
+	Array Compression (Compressed coordinates)	*/
+
+// a = [1,2,4,65,2,10000]
+vector<int> compressedArray(vector<int> a) {
+	int n = a.size();
+	vector<int> b(n);
+	vector<pair<int, int>> pairs(n);
+	for (int i = 0; i < n; ++i) {
+		pairs[i] = {a[i], i};
+	}
+	sort(pairs.begin(), pairs.end());
+	int nxt = 0;
+	for (int i = 0; i < n; ++i) {
+		if (i > 0 && pairs[i - 1].first != pairs[i].first) nxt++;
+		b[pairs[i].second] = nxt;
+	}
+	return b;
+}
+
+// a = [[1,2],[2,100],[3,4],[3,2],[2,1],[99,1],[98,1],[97,1],[95,2],[6,1]]
+vector<vector<int>> compressedArrayRange(vector<vector<int>> a) {
+	int n = a.size();
+	cout << n << endl;
+	vector<int> b(2 * n);
+	vector<pair<int, int>> pairs(2 * n);
+	for (int i = 0; i < n; ++i) {
+		pairs[2 * i] = {a[i][0], 2 * i};
+		pairs[2 * i + 1] = {a[i][0] + a[i][1], 2 * i + 1};
+	}
+	sort(pairs.begin(), pairs.end());
+	int nxt = 0;
+	for (int i = 0; i < 2 * n; ++i) {
+		if (i > 0 && pairs[i - 1].first != pairs[i].first) nxt++;
+		b[pairs[i].second] = nxt;
+	}
+
+	vector<vector<int>> compressed(n, vector<int>(2));
+
+	for (int i = 0; i < n; i++) {
+		compressed[i][0] = b[2 * i];
+		compressed[i][1] = b[2 * i + 1];
+	}
+
+	return compressed;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /*	Segment Tree
 	tree Construction : O( n )
 	Query in Range : O( Log n )
