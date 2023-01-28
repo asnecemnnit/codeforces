@@ -37,6 +37,11 @@
   </p>
 </div>
 
+<h3 align="center">Codeforces Problem Tags</h3>
+<p align="center">
+  <img title="Codeforces Tag 1" alt="Codeforces Tag 1" src="/CodeforcesTag1.JPG">
+  <img title="Codeforces Tag 2" alt="Codeforces Tag 2" src="/CodeforcesTag2.JPG">
+</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
