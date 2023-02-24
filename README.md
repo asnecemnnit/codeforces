@@ -33,7 +33,8 @@
 <h3 align="center">codeforces</h3>
 
   <p align="center">
-    Solved problems from codeforces (codechef/CSES) problemsets and attended contests. Idea was to brainstorm problem-solving and practice data-structures and algorithms problems in C++.
+    Solved problems from codeforces (codechef/CSES) problemsets and attended contests. Idea was to brainstorm problem-solving and practice data-structures and algorithms problems in C++.<br>
+    My codeforces profile: https://codeforces.com/profile/asnecemnnit
   </p>
 </div>
 
