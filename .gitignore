@@ -10,12 +10,15 @@
 */IO/*.*
 
 # Unignore files in PS_Codeforces
+!/ProblemSet/PS_Codeforces/
 !/ProblemSet/PS_Codeforces/**
 !/ProblemSet/PS_Codeforces/**/*
 !/ProblemSet/PS_Codeforces/**/*.cpp
+!/ProblemSet/PS_Codechef/
 !ProblemSet/PS_Codechef/**
 !ProblemSet/PS_Codechef/**/*
 !ProblemSet/PS_Codechef/**/*.cpp
+!/ProblemSet/PS_CSES/
 !ProblemSet/PS_CSES/**
 !ProblemSet/PS_CSES/**/*
 !ProblemSet/PS_CSES/**/*.cpp
