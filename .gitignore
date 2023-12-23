@@ -1,15 +1,18 @@
 # Ignore all
 *
 
+# Unignore ProblemSet directory
+!/ProblemSet/
+
 # Unignore all with extensions
 !*.*
 */IO/*
 */IO/*.*
 
 # Unignore files in PS_Codeforces
-!ProblemSet/PS_Codeforces/**
-!ProblemSet/PS_Codeforces/**/*
-!ProblemSet/PS_Codeforces/**/*.cpp
+!/ProblemSet/PS_Codeforces/**
+!/ProblemSet/PS_Codeforces/**/*
+!/ProblemSet/PS_Codeforces/**/*.cpp
 !ProblemSet/PS_Codechef/**
 !ProblemSet/PS_Codechef/**/*
 !ProblemSet/PS_Codechef/**/*.cpp
