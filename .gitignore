@@ -4,6 +4,8 @@
 # Unignore all with extensions
 !*.*
 !/ProblemSet/*
+!/ProblemSet/*/*
+*/IO/*
 
 *.DS_Store
 *.gitignore
