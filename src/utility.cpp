@@ -2530,6 +2530,8 @@ void topological_sort() {
 class DisjointSet {
 	int *rank, *parent, n;
 
+	unordered_map<int, std::vector<int>> sets;
+
 public:
 
 	// Constructor to create and
@@ -2548,6 +2550,7 @@ public:
 		for (int i = 0; i < n; i++) {
 			parent[i] = i;
 			rank[i] = 0;
+			sets[i] = {i}; // Each element starts in its own set
 		}
 	}
 
@@ -2588,9 +2591,13 @@ public:
 		// different
 		if (rank[xset] < rank[yset]) {
 			parent[xset] = yset;
+			sets[yset].insert(sets[yset].end(), sets[xset].begin(), sets[xset].end());
+			sets.erase(xset);
 		}
 		else if (rank[xset] > rank[yset]) {
 			parent[yset] = xset;
+			sets[xset].insert(sets[xset].end(), sets[yset].begin(), sets[yset].end());
+			sets.erase(yset);
 		}
 
 		// If ranks are same, then increment
@@ -2598,17 +2605,31 @@ public:
 		else {
 			parent[yset] = xset;
 			rank[xset] = rank[xset] + 1;
+			sets[xset].insert(sets[xset].end(), sets[yset].begin(), sets[yset].end());
+			sets.erase(yset);
 		}
 	}
 
 	// Count the number of disjoint sets
 	int countSets()
 	{
-		std::unordered_set<int> uniqueReps;
-		for (int i = 0; i < n; i++) {
-			uniqueReps.insert(find(i));
+		return sets.size();
+	}
+
+	// Get elements in the set containing x
+	vector<int> getElements(int x)
+	{
+		int representative = find(x);
+		return sets[representative];
+	}
+
+	// Get the size of each disjoint set
+	unordered_map<int, int> getSizes() {
+		unordered_map<int, int> sizes;
+		for (const auto& [representative, elements] : sets) {
+			sizes[representative] = elements.size();
 		}
-		return uniqueReps.size();
+		return sizes;
 	}
 };
 
