@@ -1655,6 +1655,42 @@ int Graph::kruskalMST()
 
 /*	KMP Algorithm for pattern matching	*/
 
+// Fills lps[] for given patttern pat[0..M-1]
+void computeLPSArray(string pat, int M, vector<int> &lps)
+{
+	// length of the previous longest prefix suffix
+	int len = 0;
+
+	lps[0] = 0; // lps[0] is always 0
+
+	// the loop calculates lps[i] for i = 1 to M-1
+	int i = 1;
+	while (i < M) {
+		if (pat[i] == pat[len]) {
+			len++;
+			lps[i] = len;
+			i++;
+		}
+		else // (pat[i] != pat[len])
+		{
+			// This is tricky. Consider the example.
+			// AAACAAAA and i = 7. The idea is similar
+			// to search step.
+			if (len != 0) {
+				len = lps[len - 1];
+
+				// Also, note that we do not increment
+				// i here
+			}
+			else // if (len == 0)
+			{
+				lps[i] = 0;
+				i++;
+			}
+		}
+	}
+}
+
 // Prints occurrences of txt[] in pat[]
 void KMPSearch(string pat, string txt)
 {
@@ -1694,44 +1730,8 @@ void KMPSearch(string pat, string txt)
 	}
 }
 
-// Fills lps[] for given patttern pat[0..M-1]
-void computeLPSArray(string pat, int M, vector<int> &lps)
-{
-	// length of the previous longest prefix suffix
-	int len = 0;
-
-	lps[0] = 0; // lps[0] is always 0
-
-	// the loop calculates lps[i] for i = 1 to M-1
-	int i = 1;
-	while (i < M) {
-		if (pat[i] == pat[len]) {
-			len++;
-			lps[i] = len;
-			i++;
-		}
-		else // (pat[i] != pat[len])
-		{
-			// This is tricky. Consider the example.
-			// AAACAAAA and i = 7. The idea is similar
-			// to search step.
-			if (len != 0) {
-				len = lps[len - 1];
-
-				// Also, note that we do not increment
-				// i here
-			}
-			else // if (len == 0)
-			{
-				lps[i] = 0;
-				i++;
-			}
-		}
-	}
-}
-
 ////////////////////////////////////////////////////////////////////////////////
-
+/* Unidirected graph creation (in vector of adj vectors format) */
 vector<vector<pair<int, int>>> adj;
 vector<pair<int, pair<int, int>>> v;
 vector<pair<int, int>> vals;
@@ -1772,7 +1772,8 @@ void createGraph(int n, bool isWeighted)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/*	MO’s Algorithm (Query Square Root Decomposition)
+/*	Solving Range Query problems
+	MO’s Algorithm (Query Square Root Decomposition)
 	The preprocessing part takes O(m Log m) time.
 	Processing all queries takes
 	O(n * √n) + O(m * √n) = O((m+n) * √n) time.	*/
@@ -1800,17 +1801,110 @@ bool compare(Query x, Query y)
 	return x.R < y.R;
 }
 
-// Prints sum of all query ranges. m is number of queries
-// n is size of array a[].
-void queryResults(int a[], int n, Query q[], int m)
-{
-	// Find block size √n
-	block = (int)sqrt(n);
+void distinctElementsInCurrentRange() {
+	// Initialize current L, current R and distinctElements
+	int currL = 0, currR = 0;
+	unordered_set<int> distinctElements;
 
-	// Sort all queries so that queries of same blocks
-	// are arranged together.
-	sort(q, q + m, compare);
+	// Traverse through all queries
+	for (int i = 0; i < m; i++)
+	{
+		// L and R values of current range
+		int L = q[i].L, R = q[i].R;
 
+		// Remove extra elements of previous range. For
+		// example if previous range is [0, 3] and current
+		// range is [2, 5], then a[0] and a[1] are subtracted
+		while (currL < L)
+		{
+			distinctElements.erase(a[currL]);
+			currL++;
+		}
+
+		// Add Elements of current Range
+		while (currL > L)
+		{
+			distinctElements.insert(a[currL - 1]);
+			currL--;
+		}
+		while (currR <= R)
+		{
+			distinctElements.insert(a[currR]);
+			currR++;
+		}
+
+		// Remove elements of previous range.  For example
+		// when previous range is [0, 10] and current range
+		// is [3, 8], then a[9] and a[10] are subtracted
+		while (currR > R + 1)
+		{
+			distinctElements.erase(a[currR - 1]);
+			currR--;
+
+		}
+
+		// Print number of distinct elements in current range
+		cout << "Number of distinct elements in [" << L << ", " << R
+		     << "] is " << distinctElements.size() << endl;
+	}
+}
+
+void FrequencyElementsInCurrentRange() {
+	// Initialize current L, current R and distinctElements
+	int currL = 0, currR = 0;
+	unordered_map<int, int> elementFrequency;
+
+	// Traverse through all queries
+	for (int i = 0; i < m; i++)
+	{
+		// L and R values of current range
+		int L = q[i].L, R = q[i].R;
+
+		// Remove extra elements of previous range
+		while (currL < L)
+		{
+			elementFrequency[a[currL]]--;
+			if (elementFrequency[a[currL]] == 0)
+			{
+				elementFrequency.erase(a[currL]);
+			}
+			currL++;
+		}
+
+		// Add Elements of current Range
+		while (currL > L)
+		{
+			elementFrequency[a[currL - 1]]++;
+			currL--;
+		}
+		while (currR <= R)
+		{
+			elementFrequency[a[currR]]++;
+			currR++;
+		}
+
+		// Remove elements of previous range
+		while (currR > R + 1)
+		{
+			elementFrequency[a[currR - 1]]--;
+			if (elementFrequency[a[currR - 1]] == 0)
+			{
+				elementFrequency.erase(a[currR - 1]);
+			}
+			currR--;
+		}
+
+		// Print frequency of each element in current range
+		cout << "Frequency of elements in [" << L << ", " << R << "]:" << endl;
+		for (const auto &pair : elementFrequency)
+		{
+			cout << "Element " << pair.first << ": " << pair.second << " times" << endl;
+		}
+		cout << endl;
+	}
+}
+
+void SumInCurrentRange() {
 	// Initialize current L, current R and current sum
 	int currL = 0, currR = 0;
 	int currSum = 0;
@@ -1855,6 +1949,20 @@ void queryResults(int a[], int n, Query q[], int m)
 		cout << "Sum of [" << L << ", " << R
 		     << "] is "  << currSum << endl;
 	}
+}
+
+// Solve query ranges. m is number of queries
+// n is size of array a[].
+void solveQuery(int a[], int n, Query q[], int m)
+{
+	// Find block size √n
+	block = (int)sqrt(n);
+
+	// Sort all queries so that queries of same blocks
+	// are arranged together.
+	sort(q, q + m, compare);
+
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2299,4 +2407,339 @@ int main() {
 
 
 	cout << a << " " << b << " " << c << " " << d << endl;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+/*	Lowest Commmon Ancestor (LCA, in parent array representation)
+	Time Complexity: O(logn)
+	Space Complexity: O(n)
+*/
+// Maximum value in a node
+const int MAX = 1000;
+
+// Function to find the Lowest common ancestor
+int findLCA(int n1, int n2, int parent[])
+{
+	// Create a visited vector and mark
+	// all nodes as not visited.
+	vector<bool> visited(MAX, false);
+
+	visited[n1] = true;
+
+	// Moving from n1 node till root and
+	// mark every accessed node as visited
+	while (parent[n1] != -1) {
+		visited[n1] = true;
+
+		// Move to the parent of node n1
+		n1 = parent[n1];
+	}
+
+	visited[n1] = true;
+
+	// For second node finding the first
+	// node common
+	while (!visited[n2])
+		n2 = parent[n2];
+
+	return n2;
+}
+
+// Insert function for Binary tree
+void insertAdj(int parent[], int i, int j)
+{
+	parent[i] = j;
+}
+
+// Driver Function
+int main()
+{
+	// Maximum capacity of binary tree
+	int parent[MAX];
+
+	// Root marked
+	parent[20] = -1;
+	insertAdj(parent, 8, 20);
+	insertAdj(parent, 22, 20);
+	insertAdj(parent, 4, 8);
+	insertAdj(parent, 12, 8);
+	insertAdj(parent, 10, 12);
+	insertAdj(parent, 14, 12);
+
+	cout << findLCA(10, 14, parent);
+
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*
+	Topological Sort of Directed Acyclic Graph (DAG)
+	Time Complexity: O(V+E)
+	Space Complexity: O(V)
+*/
+int NMAX; // number of vertices
+vvector<vector<int>> adj; // adjacency list of graph
+vector<bool> visited;
+vector<bool> inProcess; // To track vertices in the process of being explored
+vector<int> ans;
+
+bool hasCycle = false;
+
+void dfs(int v) {
+	visited[v] = true;
+	inProcess[v] = true;
+
+	for (int u : adj[v]) {
+		if (!visited[u]) {
+			dfs(u);
+		} else if (inProcess[u]) {
+			// Cycle detected
+			hasCycle = true;
+		}
+	}
+
+	inProcess[v] = false;
+	ans.push_back(v);
+}
+
+void topological_sort() {
+	visited.assign(NMAX, false);
+	inProcess.assign(NMAX, false);
+	ans.clear();
+	hasCycle = false;
+
+	for (int i = 0; i < NMAX; ++i) {
+		if (!visited[i] && !hasCycle) {
+			dfs(i);
+		}
+	}
+
+	if (hasCycle) {
+		cout << "The graph has a cycle." << endl;
+		ans.clear(); // If a cycle is detected, clear the result vector
+	} else {
+		reverse(ans.begin(), ans.end());
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/*
+	Disjoint Set (Union-Find Algorithm) / DSU
+*/
+class DisjointSet {
+	int *rank, *parent, n;
+
+public:
+
+	// Constructor to create and
+	// initialize sets of n items
+	DisjointSet(int n)
+	{
+		rank = new int[n];
+		parent = new int[n];
+		this->n = n;
+		makeSet();
+	}
+
+	// Creates n single item sets
+	void makeSet()
+	{
+		for (int i = 0; i < n; i++) {
+			parent[i] = i;
+			rank[i] = 0;
+		}
+	}
+
+	// Finds set of given item x
+	int find(int x)
+	{
+		// Finds the representative of the set
+		// that x is an element of
+		if (parent[x] != x) {
+
+			// if x is not the parent of itself
+			// Then x is not the representative of
+			// his set,
+			parent[x] = find(parent[x]);
+
+			// so we recursively call Find on its parent
+			// and move i's node directly under the
+			// representative of this set
+		}
+
+		return parent[x];
+	}
+
+	// Do union of two sets by rank represented
+	// by x and y.
+	void Union(int x, int y)
+	{
+		// Find current sets of x and y
+		int xset = find(x);
+		int yset = find(y);
+
+		// If they are already in same set
+		if (xset == yset)
+			return;
+
+		// Put smaller ranked item under
+		// bigger ranked item if ranks are
+		// different
+		if (rank[xset] < rank[yset]) {
+			parent[xset] = yset;
+		}
+		else if (rank[xset] > rank[yset]) {
+			parent[yset] = xset;
+		}
+
+		// If ranks are same, then increment
+		// rank.
+		else {
+			parent[yset] = xset;
+			rank[xset] = rank[xset] + 1;
+		}
+	}
+
+	// Count the number of disjoint sets
+	int countSets()
+	{
+		std::unordered_set<int> uniqueReps;
+		for (int i = 0; i < n; i++) {
+			uniqueReps.insert(find(i));
+		}
+		return uniqueReps.size();
+	}
+};
+
+// Driver Code
+int main()
+{
+
+	// Function Call
+	DisjointSet obj(5);
+	obj.Union(0, 2);
+	obj.Union(4, 2);
+	obj.Union(3, 1);
+
+	return 0;
+}
+
+//	Finds the representative of the set that i is an element of.
+//	Time Complexity: O(log n) on average per call.
+int findSetRepresentative(int i)
+{
+
+	// If i is the parent of itself
+	if (Parent[i] == i) {
+
+		// Then i is the representative
+		return i;
+	}
+	else {
+
+		// Recursively find the representative.
+		int result = findSetRepresentative(Parent[i]);
+
+		// We cache the result by moving i’s node
+		// directly under the representative of this
+		// set
+		Parent[i] = result;
+
+		// And then we return the result
+		return result;
+	}
+}
+
+
+
+// Unites the set that includes i and the set that includes j by rank
+void unionbyrank(int i, int j) {
+
+	// Find the representatives (or the root nodes)
+	// for the set that includes i
+	int irep = this.find(i);
+
+	// And do the same for the set that includes j
+	int jrep = this.Find(j);
+
+	// Elements are in same set, no need to
+	// unite anything.
+	if (irep == jrep)
+		return;
+
+	// Get the rank of i’s tree
+	irank = Rank[irep],
+
+	// Get the rank of j’s tree
+	jrank = Rank[jrep];
+
+	// If i’s rank is less than j’s rank
+	if (irank < jrank) {
+
+		// Then move i under j
+		this.parent[irep] = jrep;
+	}
+
+	// Else if j’s rank is less than i’s rank
+	else if (jrank < irank) {
+
+		// Then move j under i
+		this.Parent[jrep] = irep;
+	}
+
+	// Else if their ranks are the same
+	else {
+
+		// Then move i under j (doesn’t matter
+		// which one goes where)
+		this.Parent[irep] = jrep;
+
+		// And increment the result tree’s
+		// rank by 1
+		Rank[jrep]++;
+	}
+}
+
+
+// Unites the set that includes i and the set that includes j by size
+void unionBySize(int i, int j) {
+
+	// Find the representatives (or the root nodes)
+	// for the set that includes i
+	int irep = find(i);
+
+	// And do the same for the set that includes j
+	int jrep = find(j);
+
+	// Elements are in the same set, no need to
+	// unite anything.
+	if (irep == jrep)
+		return;
+
+	// Get the size of i’s tree
+	int isize = Size[irep];
+
+	// Get the size of j’s tree
+	int jsize = Size[jrep];
+
+	// If i’s size is less than j’s size
+	if (isize < jsize) {
+
+		// Then move i under j
+		Parent[irep] = jrep;
+
+		// Increment j's size by i's size
+		Size[jrep] += Size[irep];
+	}
+
+	// Else if j’s size is less than i’s size
+	else {
+
+		// Then move j under i
+		Parent[jrep] = irep;
+
+		// Increment i's size by j's size
+		Size[irep] += Size[jrep];
+	}
 }
