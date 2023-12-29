@@ -7,4 +7,5 @@ if [ "$#" -eq 1 ]; then
 else
 	subl ../ProblemSet/$2/$1.cpp
 fi
+sh ./clear_binaries.sh
 sh ./clear_io.sh

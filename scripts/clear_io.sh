@@ -7,3 +7,4 @@ rm output.txt
 touch output.txt
 rm log.txt 
 touch log.txt
+echo "IO files cleared successfully"

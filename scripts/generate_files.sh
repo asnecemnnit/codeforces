@@ -6,5 +6,5 @@ echo "Generated" $2 "files"
 subl ../../codeforces
 subl ../src/utility.cpp
 subl -p ../"$1"/*.cpp
+sh ./clear_binaries.sh
 sh ./clear_io.sh
-echo "Cleared IO files"
