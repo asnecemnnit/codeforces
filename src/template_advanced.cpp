@@ -30,6 +30,7 @@
 #include "ext/pb_ds/tree_policy.hpp"
 
 using namespace std;
+using namespace __gnu_pbds;
 
 /*******  All Required define Pre-Processors and typedef Constants *******/
 const string nl = "\n";
