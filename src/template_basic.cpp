@@ -114,7 +114,6 @@ typedef long long int int64;
 typedef unsigned long long int uint64;
 
 /****** Template of some basic operations *****/
-
 template <typename T, typename U> inline void amin(T &x, U y) {
   if (y < x)
     x = y;
@@ -125,7 +124,6 @@ template <typename T, typename U> inline void amax(T &x, U y) {
 }
 
 /****************************** Miscellaneous ********************************/
-
 // Custom hash to be used in conjunction with unordered_map, unordered_set
 // Read blog post : Blowing up unordered_map, and how to stop getting hacked on
 // it (https://codeforces.com/blog/entry/62393) Usage: unordered_map<int, int,
@@ -156,7 +154,6 @@ typedef tree<int, null_type, less<int>, rb_tree_tag,
     ordered_set;
 
 /******************** Template of Fast I/O Methods ***************************/
-
 template <typename T> inline void write(T x) {
   int i = 20;
   char buf[21];
@@ -189,7 +186,6 @@ template <typename T> inline T readInt() {
 }
 
 /************************************ RNG ************************************/
-
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 inline int64_t random_long(long long l = LLONG_MIN, long long r = LLONG_MAX) {
   uniform_int_distribution<int64_t> generator(l, r);
@@ -197,7 +193,6 @@ inline int64_t random_long(long long l = LLONG_MIN, long long r = LLONG_MAX) {
 }
 
 /************************* Debugging Class Template **************************/
-
 #ifdef DEBUG
 
 #define debug(args...) (Debugger()), args
