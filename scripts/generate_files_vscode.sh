@@ -6,5 +6,5 @@ echo "Generated" $2 "files"
 code ../../codeforces
 code ../src/utility.cpp
 code -p ../"$1"/*.cpp
-sh ./clear_binaries.sh
+sh ./remove_binaries.sh
 sh ./clear_io.sh
