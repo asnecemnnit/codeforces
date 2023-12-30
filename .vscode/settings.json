@@ -3,5 +3,6 @@
     "limits": "cpp",
     "valarray": "cpp",
     "algorithm": "cpp"
-  }
+  },
+  "editor.formatOnSave": true
 }
