@@ -1,6 +1,6 @@
 {
  
- "cmd":["bash", "-c", "g++ -std=c++14 -Wall '${file}' -o '${file_path}/${file_base_name}' && '${file_path}/${file_base_name}'"],
+ "cmd":["bash", "-c", "g++-13 -std=c++14 -Wall '${file}' -o '${file_path}/${file_base_name}' && '${file_path}/${file_base_name}'"],
  
  "file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
  
@@ -16,7 +16,7 @@
  
      "name": "Run",
  
-     "cmd":["bash", "-c", "g++ -DSUBLIME_TEXT -DDEBUG -std=c++17 '${file}' -o '${file_path}/${file_base_name}' && '${file_path}/${file_base_name}'"]
+     "cmd":["bash", "-c", "g++-13 -DSUBLIME_TEXT -DDEBUG '${file}' -o '${file_path}/${file_base_name}' && '${file_path}/${file_base_name}'"]
  
    }
  

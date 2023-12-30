@@ -26,8 +26,8 @@
 #include <assert.h>
 #include "bits/stdc++.h"
 #include <numeric>		// contains inbuilt gcd(a, b) function
-// #include "ext/pb_ds/assoc_container.hpp"
-// #include "ext/pb_ds/tree_policy.hpp"
+#include "ext/pb_ds/assoc_container.hpp"
+#include "ext/pb_ds/tree_policy.hpp"
 
 using namespace std;
 
@@ -113,6 +113,13 @@ struct custom_hash {
 		return splitmix64(x + FIXED_RANDOM);
 	}
 };
+
+// Ordered set (to be used for ordered sets (multiset))
+// Usage:
+// ordered_set ost;
+// ost.insert(x)
+// ost.order_of_key(x)
+typedef tree <int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 
 /****** Template of Fast I/O Methods *********/
 template <typename T> inline void write(T x)

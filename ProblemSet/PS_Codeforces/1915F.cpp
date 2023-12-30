@@ -1,3 +1,5 @@
+// 1915F.cpp
+#define PROBLEMSET
 // Created by Ashish Negi
 
 /********   All Required Header Files ********/
@@ -30,6 +32,7 @@
 #include "ext/pb_ds/tree_policy.hpp"
 
 using namespace std;
+using namespace __gnu_pbds;
 
 /*******  All Required define Pre-Processors and typedef Constants *******/
 const string nl = "\n";
@@ -178,11 +181,35 @@ const int NMAX = 3e5;
 int n, m;
 
 /******* User-defined Functions *******/
-
+bool comp(pair<int64, int64> a, pair<int64, int64> b) {
+	return a.first < b.first;
+}
 
 /**************************************/
 void solve()
 {
+	inp(n);
+	ordered_set mst;
+
+	vector<pair<int64, int64>> ab(n);
+
+	lp(i, n) {
+		inpp(ab[i].first, ab[i].second);
+	}
+
+	sort(all(ab), comp);
+
+	uint64 ans = 0;
+
+	lp(i, n) {
+
+		ans += (uint64)mst.size() - mst.order_of_key(ab[i].second);
+		dbg2(i, ans);
+		mst.insert(ab[i].second);
+
+	}
+
+	out(ans);
 	return;
 }
 
