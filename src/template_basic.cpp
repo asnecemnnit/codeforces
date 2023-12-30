@@ -242,6 +242,7 @@ private:
 #define ONLINE_JUDGE
 #endif /*	ONLINE_JUDGE	*/
 // #define SUBLIME_TEXT
+// #define VSCODE
 // #define DEBUG
 // #define CLOCK
 #define MULT_TC
@@ -262,7 +263,7 @@ void solve() { return; }
 
 /****************************  Main() Starts Here ****************************/
 int main() {
-#if !defined(ONLINE_JUDGE) || defined(SUBLIME_TEXT)
+#if !defined(ONLINE_JUDGE) || defined(SUBLIME_TEXT) || defined(VSCODE)
 #if !defined(PROBLEMSET)
   freopen("../IO/input.txt", "r", stdin);
   freopen("../IO/output.txt", "w", stdout);
