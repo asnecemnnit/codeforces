@@ -19,6 +19,12 @@ const int mod1 = 998244353;
 const int NMAX = 1e6;
 uint64 divCount[NMAX + 1];
 
+/* determines whether num is a perfect square or not */
+bool isPerfectSquare(uint64 num) {
+	uint64 sqrtnum = sqrt(num);
+	return ((sqrtnum * sqrtans) == num);
+}
+
 /*	Could be optimised by Sieve ?? */
 /*	NlogN complexity	*/
 void divCount_upto_n(int n)
@@ -32,7 +38,6 @@ void divCount_upto_n(int n)
 	}
 	return;
 }
-
 
 /*	precomputes sum of divisors/factors upto n */
 const int NMAX = 10000000;
@@ -61,7 +66,6 @@ void biggestDivisor_upto_n() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
 /*	precomputes factorial upto	M	*/
 #define M 100000
 int fact[M + 1], i_f[M + 1];
@@ -114,6 +118,7 @@ int Npr(int n, int r) {
 	}
 	return ans;
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 /*  returns gcd of a & b    */
 int gcd(int a, int b)
@@ -123,8 +128,8 @@ int gcd(int a, int b)
 	return gcd(b, a % b);
 
 }
-////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////
 /*	check vector<int> is a palindrome	*/
 bool isVecPalindrome(VI a)
 {
@@ -162,7 +167,6 @@ bool isStrPalindrome(string a)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
 /*	check number is a power of 2	*/
 bool isPowerOfTwo(int n)
 {
@@ -231,9 +235,7 @@ int getMinAdjSwaps(string s1, string s2)
 	return getInvCount(P, s1.size());
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////
-
 /* Returns prime bool vector using sieve of Eratosthenes algorithm */
 vector<bool> SieveOfEratosthenes(int n = 1000000)
 {
@@ -348,7 +350,6 @@ int lengthOfLIS(vector<int>& nums)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-
 /*	Returns the length of the longest
     increasing subsequence (LIS) in nums. O(nlogn)	*/
 
@@ -399,7 +400,6 @@ int LongestIncreasingSubsequenceLength(vector<int>& v)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
 /*	Returns the length of the longest
     increasing subsequence (LIS) in nums. O(n^2)	*/
 int lengthOfLIS(vector<int>& nums)
@@ -424,7 +424,6 @@ int lengthOfLIS(vector<int>& nums)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
 /* Returns length of longest common subsequence for X[0..m-1], Y[0..n-1] */
 int lcs(string X, string Y, int m, int n )
 {
@@ -550,7 +549,6 @@ string shortestCommonSupersequence(string str1, string str2) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
 /* Returns length of longest
    common substring of X[0..m-1]
    and Y[0..n-1] */
@@ -592,7 +590,6 @@ int LCSubStr(string X, string Y, int m, int n)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
 /*	Find number of times a string occurs as
 	a subsequence in given string	*/
 
@@ -702,6 +699,7 @@ int knapSack(int W, vector<int> wt, vector<int> val, int n)
 			dp[i][j] = -1;
 	return knapSackRec(W, wt, val, n - 1, dp);
 }
+
 //////////////////////////////////////////////////////////////////////////
 // Returns the maximum value that
 // can be put in a knapsack of capacity W
@@ -730,8 +728,8 @@ int knapSack(int W, vector<int> wt, vector<int> val, int n)
 	}
 	return K[n][W];
 }
-//////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////
 /*  Unbounded Knapsack (Repetition of items allowed)    */
 // Returns the maximum value with knapsack of
 // W capacity
@@ -753,7 +751,6 @@ int unboundedKnapsack(int W, int n,
 
 /////////////////////////////////////////////////////////////////////////////
 /*  In Fractional Knapsack, we can break items for maximizing the total value of knapsack   */
-
 // Structure for an item which stores weight and
 // corresponding value of Item
 struct Item {
@@ -926,8 +923,8 @@ void shortest_path_unweighted()
 	cout << "\n";
 	return;
 }
-////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////
 /*	At each iteration the vertex v is selected
 	which has the smallest distance d[v] among
 	all the unmarked vertices. If the distance
@@ -1059,180 +1056,222 @@ void dijkstra(int graph[V][V], int src)
 	the algorithm goes through all nodes in the graph
 	and adds for each edge at most one distance to
 	the priority queue
+	- Greedy Approach.
+	- Faster in practice on sparse graphs (where the number of edges is much smaller than the number of nodes).
+	- Requires non-negative edge weights.
+	- Does not handle graphs with negative weights or cycles well.
 */
 const int N = 2e5;
-/*	C++ priority queue finds maximum element as default, but our use
-	case needs minimum as default, hence negative weights are used
-*/
-priority_queue<pair<int, int>> q;	/*	(distance, node)	*/
-vector<int> e[N + 1];			/*	e[] contains minimum distance from 'x'
-									to all nodes in the graph	*/
+const int INF = numeric_limits<int>::max();  // Represents infinity
 
+priority_queue<pair<int, int>> q;  /* (distance, node) */
+vector<pair<int, int>> adj[N + 1];  /* adj[] contains minimum distance from 'x'
+                                       to all nodes in the graph */
+bool vis[N + 1];  /* Array to mark visited nodes */
 
-void dijkstra(int x) {
-	for (int i = 1; i <= n; i++) e[i] = 1e9;
-	e[x] = 0;
+void dijkstra(int x, int n) {
+	vector<int> dist(N + 1, INF);  /* Initialize distances to infinity */
+	dist[x] = 0;
 	q.push({0, x});
+
 	while (!q.empty()) {
-		int a = q.top().second; q.pop();
-		if (z[a]) continue;
-		z[a] = 1;
-		for (auto b : v[a]) {
-			if (e[a] + b.second < e[b.first]) {
-				e[b.first] = e[a] + b.second;
-				q.push({ -e[b.first], b.first});	/*	push negative weights
-														in priority queue	*/
+		int a = q.top().second;
+		q.pop();
+
+		if (vis[a]) continue;
+		vis[a] = true;
+
+		for (auto& edge : adj[a]) {
+			int b = edge.first;
+			int weight = edge.second;
+
+			if (dist[a] != INF && dist[a] + weight < dist[b]) {
+				dist[b] = dist[a] + weight;
+				q.push({ -dist[b], b});  /* push negative weights
+                                           in priority queue */
 			}
 		}
 	}
-	return;
-}
-////////////////////////////////////////////////////////////////////////////////
-
-// a structure to represent a weighted edge in graph
-struct Edge {
-	int src, dest, weight;
-};
-
-// a structure to represent a connected, directed and
-// weighted graph
-struct Graph {
-	// V-> Number of vertices, E-> Number of edges
-	int V, E;
-
-	// graph is represented as an array of edges.
-	struct Edge* edge;
-};
-
-// Creates a graph with V vertices and E edges
-struct Graph* createGraph(int V, int E)
-{
-	struct Graph* graph = new Graph;
-	graph->V = V;
-	graph->E = E;
-	graph->edge = new Edge[E];
-	return graph;
 }
 
-// A utility function used to print the solution
-void printArr(int dist[], int n)
-{
-	printf("Vertex   Distance from Source\n");
-	for (int i = 0; i < n; ++i)
-		printf("%d \t\t %d\n", i, dist[i]);
-}
+int main() {
+	// Example usage
+	int n = 6;  /* Number of nodes */
+	adj[1] = {{2, 1}, {3, 4}};
+	adj[2] = {{1, 1}, {3, 2}, {4, 5}};
+	adj[3] = {{1, 4}, {2, 2}, {4, 1}};
+	adj[4] = {{2, 5}, {3, 1}, {5, 3}};
+	adj[5] = {{4, 3}};
 
-// The main function that finds shortest distances from src to
-// all other vertices using Bellman-Ford algorithm.  The function
-// also detects negative weight cycle
-void BellmanFord(struct Graph* graph, int src)
-{
-	int V = graph->V;
-	int E = graph->E;
-	int dist[V];
+	int sourceNode = 1;
+	dijkstra(sourceNode, n);
 
-	// Step 1: Initialize distances from src to all other vertices
-	// as INFINITE
-	for (int i = 0; i < V; i++)
-		dist[i] = INT_MAX;
-	dist[src] = 0;
-
-	// Step 2: Relax all edges |V| - 1 times. A simple shortest
-	// path from src to any other vertex can have at-most |V| - 1
-	// edges
-	for (int i = 1; i <= V - 1; i++) {
-		for (int j = 0; j < E; j++) {
-			int u = graph->edge[j].src;
-			int v = graph->edge[j].dest;
-			int weight = graph->edge[j].weight;
-			if (dist[u] != INT_MAX && dist[u] + weight < dist[v])
-				dist[v] = dist[u] + weight;
+	// Output the minimum distances
+	for (int i = 1; i <= n; ++i) {
+		cout << "Minimum distance from node " << sourceNode << " to node " << i << ": ";
+		if (vis[i]) {
+			cout << dist[i] << endl;
+		} else {
+			cout << "Not reachable" << endl;
 		}
 	}
 
-	// Step 3: check for negative-weight cycles.  The above step
-	// guarantees shortest distances if graph doesn't contain
-	// negative weight cycle.  If we get a shorter path, then there
-	// is a cycle.
-	for (int i = 0; i < E; i++) {
-		int u = graph->edge[i].src;
-		int v = graph->edge[i].dest;
-		int weight = graph->edge[i].weight;
-		if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
-			printf("Graph contains negative weight cycle");
-			return; // If negative cycle is detected, simply return
-		}
-	}
-
-	printArr(dist, V);
-
-	return;
+	return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Simple Bellman Ford	O(nm)
 	n -> nodes
-	m -> edges (where is m used in below function?)
+	m -> edges
+	- Dynamic Programming.
+	- Handles graphs with negative weights.
+	- Detects negative weight cycles.
+	- Slower than Dijkstra's algorithm, especially on sparse graphs.
+	- Not suitable for graphs with negative weight cycles (as it may not provide correct results).
 */
 const int N = 2e5;
-vector<pair<int, int>> v[N];	//	(adj, weight)
-vector<int> e[N + 1];			/*	e[] contains minimum distance from 'x'
-									to all nodes in the graph	*/
-void BellmanFord(int x, int n) {
-	for (int i = 1; i <= n; i++) e[i] = 1e9;
-	e[x] = 0;
+const int INF = numeric_limits<int>::max();  // Represents infinity
 
+vector<pair<int, int>> adj[N];  // Adjacency list representation of the graph
+vector<int> dist[N + 1];  // dist[] contains minimum distance from 'x' to all nodes in the graph
 
-	/*	n-1 rounds for finding minimum path to all nodes	*/
-	for (int i = 1; i <= n - 1; i++) {
-		for (int a = 1; a <= n; a++) {
-			for (auto b : v[a]) {
-				e[b.first] = min(e[b.first], e[a] + b.second);
+void BellmanFord(int sourceNode, int numNodes) {
+	for (int i = 1; i <= numNodes; i++) {
+		dist[i] = INF;  // Initialize distances to infinity
+	}
+	dist[sourceNode] = 0;
+
+	// n-1 rounds for finding the minimum path to all nodes
+	for (int round = 1; round <= numNodes - 1; round++) {
+		for (int current = 1; current <= numNodes; current++) {
+			for (auto& neighbor : adj[current]) {
+				int nextNode = neighbor.first;
+				int weight = neighbor.second;
+
+				dist[nextNode] = min(dist[nextNode], dist[current] + weight);
 			}
 		}
 	}
 
-	/*	nth round to detect negative weight cycle anywhere in the graph	*/
-	for (int a = 1; a <= n; a++) {
-		for (auto b : v[a]) {
-			if (e[b.first] > e[a] + b.second) {
-				printf("Graph contains negative weight cycle");
-				return; // If negative cycle is detected, simply return
+	// nth round to detect a negative weight cycle anywhere in the graph
+	for (int current = 1; current <= numNodes; current++) {
+		for (auto& neighbor : adj[current]) {
+			int nextNode = neighbor.first;
+			int weight = neighbor.second;
+
+			if (dist[nextNode] > dist[current] + weight) {
+				cout << "Graph contains a negative weight cycle." << endl;
+				return;  // If a negative cycle is detected, simply return
 			}
 		}
 	}
 
 	return;
 }
+
+int main() {
+	// Example usage
+	int numNodes = 5;  // Number of nodes
+	adj[1] = {{2, -1}, {3, 4}};
+	adj[2] = {{3, 3}, {4, 2}, {5, 1}};
+	adj[3] = {{2, 1}};
+	adj[4] = {{3, 5}, {5, -3}};
+	adj[5] = {};
+
+	int sourceNode = 1;
+	BellmanFord(sourceNode, numNodes);
+
+	// Output the minimum distances
+	for (int i = 1; i <= numNodes; ++i) {
+		cout << "Minimum distance from node " << sourceNode << " to node " << i << ": ";
+		if (dist[i] == INF) {
+			cout << "Not reachable" << endl;
+		} else {
+			cout << dist[i] << endl;
+		}
+	}
+
+	return 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /*	Shortest path faster algorithm (SPFA)
 	More efficient (depending on graph structure) than Bellman Ford
 	but worst case still O(nm)
 	n -> nodes
+	- Dynamic Programming, but Queue-Based Relaxation.
+	- Handles graphs with negative weights.
+	- Detects negative weight cycles.
+	- Can be faster on average than Bellman-Ford.
 */
 const int N = 2e5;
-vector<pair<int, int>> v[N];	//	(adj, weight)
-vector<int> e[N + 1];			/*	e[] contains minimum distance from 'x'
-									to all nodes in the graph	*/
-void spfa(int x) {
-	for (int i = 1; i <= n; i++) e[i] = 1e9;
-	e[x] = 0;
-	q.push(x);
+const int INF = numeric_limits<int>::max();  // Represents infinity
+
+vector<pair<int, int>> adj[N];  // Adjacency list representation of the graph
+vector<int> dist[N + 1];  /* dist[] contains minimum distance from 'x'
+                             to all nodes in the graph */
+queue<int> q;  // Queue for the SPFA algorithm
+bool inQueue[N + 1];  // Array to check if a node is in the queue
+
+void spfa(int sourceNode) {
+	for (int i = 1; i <= N; i++) {
+		dist[i] = INF;  // Initialize distances to infinity
+		inQueue[i] = false;  // Initialize inQueue array
+	}
+
+	dist[sourceNode] = 0;
+	q.push(sourceNode);
+	inQueue[sourceNode] = true;
+
 	while (!q.empty()) {
-		int a = q.front(); q.pop();
-		z[a] = 0;
-		for (auto b : v[a]) {
-			if (e[a] + b.second < e[b.first]) {
-				e[b.first] = e[a] + b.second;
-				if (!z[b]) {q.push(b); z[b] = 1;}
+		int current = q.front();
+		q.pop();
+		inQueue[current] = false;
+
+		for (auto& neighbor : adj[current]) {
+			int nextNode = neighbor.first;
+			int weight = neighbor.second;
+
+			if (dist[current] != INF && dist[current] + weight < dist[nextNode]) {
+				dist[nextNode] = dist[current] + weight;
+
+				if (!inQueue[nextNode]) {
+					q.push(nextNode);
+					inQueue[nextNode] = true;
+				}
 			}
 		}
 	}
+
 	return;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+int main() {
+	// Example usage
+	int numNodes = 5;  // Number of nodes
+	adj[1] = {{2, 1}, {3, 4}};
+	adj[2] = {{3, 2}, {4, 5}};
+	adj[3] = {{2, 1}};
+	adj[4] = {{3, 5}, {5, -3}};
+	adj[5] = {};
 
+	int sourceNode = 1;
+	spfa(sourceNode);
+
+	// Output the minimum distances
+	for (int i = 1; i <= numNodes; ++i) {
+		cout << "Minimum distance from node " << sourceNode << " to node " << i << ": ";
+		if (dist[i] == INF) {
+			cout << "Not reachable" << endl;
+		} else {
+			cout << dist[i] << endl;
+		}
+	}
+
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /* 	find a spanning tree of this graph which connects
  	all vertices and has the least weight (i.e. the sum
 	of weights of edges is minimal). A spanning tree is
@@ -1283,7 +1322,6 @@ vector<pair<int, int>> vals;
 	all vertices (or equivalently until we have n−1 edges)	*/
 
 // Dense graphs : O(n2) time and O(n) memory
-
 void prim(int n) {
 	int total_weight = 0;
 	vector<bool> selected(n, false);
@@ -1371,7 +1409,6 @@ void prim() {
 
 ////////////////////////////////////////////////////////////////////////////////
 /* Finding MST using Kruskal's algorithm
-
 	1. Sort all the edges in non-decreasing order of their weight.
 	2. Pick the smallest edge. Check if it forms a cycle with the
 	spanning tree formed so far. If cycle is not formed, include
@@ -1610,7 +1647,6 @@ struct DisjointSets
 };
 
 /* Functions returns weight of the MST*/
-
 int Graph::kruskalMST()
 {
 	int mst_wt = 0; // Initialize result
@@ -1652,9 +1688,7 @@ int Graph::kruskalMST()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
 /*	KMP Algorithm for pattern matching	*/
-
 // Fills lps[] for given patttern pat[0..M-1]
 void computeLPSArray(string pat, int M, vector<int> &lps)
 {
@@ -1769,7 +1803,6 @@ void createGraph(int n, bool isWeighted)
 	return;
 
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Solving Range Query problems
@@ -1966,7 +1999,6 @@ void solveQuery(int a[], int n, Query q[], int m)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
 /*	Binary Index Tree (BITree) or Fenwick Tree
 	query and update operations in O(log n) time.	*/
 
@@ -2227,7 +2259,6 @@ void updateRange(int node, int start, int end, int l, int r, int val, string op)
 // Lazy Propagation
 vector<uint64> lazy1, lazy2, tree, arr;
 
-
 // O(N)
 void build(int node, int start, int end)
 {
@@ -2277,7 +2308,6 @@ void propagate_down(int node, int start, int mid, int end) {
 		lazy1[node] = 0;                                  // Reset it
 	}
 }
-
 
 void updateRangeLazy(int node, int start, int end, int l, int r, int val)
 {
@@ -2408,7 +2438,6 @@ int main() {
 
 	cout << a << " " << b << " " << c << " " << d << endl;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /*	Lowest Commmon Ancestor (LCA, in parent array representation)
@@ -2669,56 +2698,6 @@ int findSetRepresentative(int i)
 
 		// And then we return the result
 		return result;
-	}
-}
-
-
-
-// Unites the set that includes i and the set that includes j by rank
-void unionbyrank(int i, int j) {
-
-	// Find the representatives (or the root nodes)
-	// for the set that includes i
-	int irep = this.find(i);
-
-	// And do the same for the set that includes j
-	int jrep = this.Find(j);
-
-	// Elements are in same set, no need to
-	// unite anything.
-	if (irep == jrep)
-		return;
-
-	// Get the rank of i’s tree
-	irank = Rank[irep],
-
-	// Get the rank of j’s tree
-	jrank = Rank[jrep];
-
-	// If i’s rank is less than j’s rank
-	if (irank < jrank) {
-
-		// Then move i under j
-		this.parent[irep] = jrep;
-	}
-
-	// Else if j’s rank is less than i’s rank
-	else if (jrank < irank) {
-
-		// Then move j under i
-		this.Parent[jrep] = irep;
-	}
-
-	// Else if their ranks are the same
-	else {
-
-		// Then move i under j (doesn’t matter
-		// which one goes where)
-		this.Parent[irep] = jrep;
-
-		// And increment the result tree’s
-		// rank by 1
-		Rank[jrep]++;
 	}
 }
 
