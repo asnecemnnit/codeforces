@@ -235,14 +235,13 @@ const int NMAX = 3e5;
 int n, m;
 
 /************************** User-Defined Functions ***************************/
-
+uint64 ceil_div(uint64 a, uint64 b) { return (a + b - 1) / b; }
 /******************************** Solve **************************************/
 void solve() {
   uint64 x, y, k;
   inppp(x, y, k);
 
-  uint64 ans =
-      (uint64)ceil((long double)(k * (y + 1) - 1) / (long double)(x - 1)) + k;
+  uint64 ans = ceil_div((k * (y + 1) - 1), x - 1) + k;
 
   out(ans);
   return;
