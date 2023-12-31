@@ -17,6 +17,8 @@ x &(x - 1) == 0; // => positive number x is of form 2^k
 x | (x - 1);     // inverts all the bits after the last one bit
 
 /************************** User-Defined Functions ***************************/
+/*	computes ceil for division of two (large) numbers	*/
+int64_t ceil_div(int64_t a, int64_t b) { return (a + b - 1) / b; }
 
 /*	precomputes divisors/factors upto n	*/
 const int mod1 = 998244353;

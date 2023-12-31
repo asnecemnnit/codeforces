@@ -1,3 +1,5 @@
+// 1418A.cpp
+#define PROBLEMSET
 // Created by Ashish Negi
 
 /************************* All Required Header Files *************************/
@@ -88,7 +90,6 @@ typedef long int int32;
 typedef unsigned long int uint32;
 typedef long long int int64;
 typedef unsigned long long int uint64;
-typedef long double uld64;
 
 /****** Template of some basic operations *****/
 template <typename T, typename U> inline void amin(T &x, U y) {
@@ -236,7 +237,16 @@ int n, m;
 /************************** User-Defined Functions ***************************/
 
 /******************************** Solve **************************************/
-void solve() { return; }
+void solve() {
+  uint64 x, y, k;
+  inppp(x, y, k);
+
+  uint64 ans =
+      (uint64)ceil((long double)(k * (y + 1) - 1) / (long double)(x - 1)) + k;
+
+  out(ans);
+  return;
+}
 
 /****************************  Main() Starts Here ****************************/
 int main() {

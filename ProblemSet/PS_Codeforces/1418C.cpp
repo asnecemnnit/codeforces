@@ -1,3 +1,5 @@
+// 1418C.cpp
+#define PROBLEMSET
 // Created by Ashish Negi
 
 /************************* All Required Header Files *************************/
@@ -88,7 +90,6 @@ typedef long int int32;
 typedef unsigned long int uint32;
 typedef long long int int64;
 typedef unsigned long long int uint64;
-typedef long double uld64;
 
 /****** Template of some basic operations *****/
 template <typename T, typename U> inline void amin(T &x, U y) {
@@ -230,13 +231,41 @@ clock_t time_req;
 #endif /* CLOCK */
 
 /************************* Global Variables/Constants ************************/
-const int NMAX = 3e5;
+const int NMAX = 2e5 + 1;
 int n, m;
+int dpf[NMAX][2], dp[NMAX][1];
 
 /************************** User-Defined Functions ***************************/
 
 /******************************** Solve **************************************/
-void solve() { return; }
+void solve() {
+  inp(n);
+
+  vi a(n);
+  inpv(a, n);
+
+  // outv(a, n);
+  lp(i, n) {
+    dp[i][0] = dp[i][1] = INT_MAX;
+    dpf[i][0] = dpf[i][1] = INT_MAX;
+  }
+  int i = n - 1;
+  while (i >= 0) {
+    if (i == n - 1) {
+      dpf[i][0] = dpf[i][1] = a[i];
+      dp[i][0] = dp[i][1] = 0;
+    } else {
+      dpf[i][0] = a[i] + min(dp[i + 1][0], dpf[i + 1][1]);
+      dpf[i][1] = a[i] + dp[i + 1][0];
+      dp[i][0] = min(dp[i + 1][1], dpf[i + 1][0]);
+      dp[i][1] = dpf[i + 1][0];
+    }
+    i--;
+  }
+
+  out(dpf[0][0]);
+  return;
+}
 
 /****************************  Main() Starts Here ****************************/
 int main() {

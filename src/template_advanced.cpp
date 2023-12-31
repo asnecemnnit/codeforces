@@ -88,6 +88,7 @@ typedef long int int32;
 typedef unsigned long int uint32;
 typedef long long int int64;
 typedef unsigned long long int uint64;
+typedef long double uld64;
 
 /****** Template of some basic operations *****/
 template <typename T, typename U> inline void amin(T &x, U y) {
