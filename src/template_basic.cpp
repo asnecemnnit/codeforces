@@ -113,7 +113,6 @@ struct custom_hash {
     x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
     return x ^ (x >> 31);
   }
-
   size_t operator()(uint64_t x) const {
     static const uint64_t FIXED_RANDOM =
         chrono::steady_clock::now().time_since_epoch().count();
@@ -131,9 +130,17 @@ typedef tree<int, null_type, less<int>, rb_tree_tag,
     ordered_set;
 
 /************************************ RNG ************************************/
+// Initialize a 64-bit Mersenne Twister pseudo-random number generator using the
+// current time as seed
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+// Template for generating a random 64-bit integer in the specified range [l, r]
 inline int64_t random_long(long long l = LLONG_MIN, long long r = LLONG_MAX) {
+  // Create a uniform distribution for generating random integers in the
+  // specified range
   uniform_int_distribution<int64_t> generator(l, r);
+
+  // Generate and return a random 64-bit integer
   return generator(rng);
 }
 
