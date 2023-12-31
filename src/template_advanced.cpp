@@ -131,6 +131,7 @@ typedef tree<int, null_type, less<int>, rb_tree_tag,
     ordered_set;
 
 /******************** Template of Fast I/O Methods ***************************/
+// Template for efficiently writing integers to the output stream.
 template <typename T> inline void write(T x) {
   int i = 20;
   char buf[21];
@@ -145,6 +146,8 @@ template <typename T> inline void write(T x) {
     putchar(buf[i]);
   } while (buf[i++] != '\n');
 }
+
+// Template for efficiently reading integers from the input stream.
 template <typename T> inline T readInt() {
   T n = 0, s = 1;
   char p = getchar();
