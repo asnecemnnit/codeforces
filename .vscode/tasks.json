@@ -10,7 +10,8 @@
         "${file}",
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}",
-        "-DVSCODE"
+        "-DVSCODE",
+        "-DDEBUG"
       ],
       "options": {
         "cwd": "${fileDirname}"

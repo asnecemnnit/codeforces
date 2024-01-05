@@ -15,7 +15,8 @@
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-x64",
             "compilerArgs": [
-                "-DVSCODE"
+                "-DVSCODE",
+                "-DDEBUG"
             ]
         }
     ],
