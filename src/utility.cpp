@@ -2323,8 +2323,8 @@ int findLCA(int n1, int n2, int parent[]) {
   return n2;
 }
 
-// Insert function for Binary tree
-void insertAdj(int parent[], int i, int j) { parent[i] = j; }
+// Insert function for assigning parent
+void assignParent(int parent[], int i, int j) { parent[i] = j; }
 
 // Driver Function
 int main() {
@@ -2333,12 +2333,12 @@ int main() {
 
   // Root marked
   parent[20] = -1;
-  insertAdj(parent, 8, 20);
-  insertAdj(parent, 22, 20);
-  insertAdj(parent, 4, 8);
-  insertAdj(parent, 12, 8);
-  insertAdj(parent, 10, 12);
-  insertAdj(parent, 14, 12);
+  assignParent(parent, 8, 20);
+  assignParent(parent, 22, 20);
+  assignParent(parent, 4, 8);
+  assignParent(parent, 12, 8);
+  assignParent(parent, 10, 12);
+  assignParent(parent, 14, 12);
 
   cout << findLCA(10, 14, parent);
 
