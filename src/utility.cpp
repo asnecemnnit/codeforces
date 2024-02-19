@@ -1674,6 +1674,44 @@ void KMPSearch(string pat, string txt) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/*	Z Algorithm for pattern matching	*/
+vector<int> z_function(string s) {
+  int n = s.size();
+  vector<int> z(n);
+  int l = 0, r = 0;
+  for (int i = 1; i < n; i++) {
+    if (i < r) {
+      z[i] = min(r - i, z[i - l]);
+    }
+    while (i + z[i] < n && s[z[i]] == s[i + z[i]]) {
+      z[i]++;
+    }
+    if (i + z[i] > r) {
+      l = i;
+      r = i + z[i];
+    }
+  }
+  return z;
+}
+
+void Zsearch(string pattern, string text) {
+  // Create concatenated string "P$T"
+  string concat = pattern + "$" + text;
+  int l = concat.length();
+
+  // Construct Z array
+  vector<int> Z = z_function(text);
+
+  // now looping through Z array for matching condition
+  for (int i = 0; i < l; ++i) {
+    // if Z[i] (matched region) is equal to pattern
+    // length we got the pattern
+    if (Z[i] == pattern.length())
+      cout << "Pattern found at index " << i - pattern.length() - 1 << endl;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /* Unidirected graph creation (in vector of adj vectors format) */
 vector<vector<pair<int, int>>> adj;
 vector<pair<int, pair<int, int>>> v;
